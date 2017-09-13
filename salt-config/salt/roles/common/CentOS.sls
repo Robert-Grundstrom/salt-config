@@ -1,13 +1,10 @@
 # Salt Centos configuration file.
 ---
-# Install packets.
-centos_packets_install:
-  pkg.latest:
-    - pkgs:
-      - ntp
-      - vim-enhanced
-      - sudo
-      - openssh-server
+# Install default packets.
+{%-for packet in salt['pillar.get']('server:settings:set_default_packets',)%}
+{{packet}}:
+  pkg.latest
+{%- endfor %}
 
 # Apply configuration files.
 centos_apply_configuration:
@@ -15,6 +12,7 @@ centos_apply_configuration:
     - names:
       - '/sbin/call_home':
         - contents: 'salt-call --state_output=mixed state.apply'
+        - mode: 755
       - '/etc/resolv.conf':
         - source: salt://{{slspath}}/files/resolv.conf
     - mode: 644

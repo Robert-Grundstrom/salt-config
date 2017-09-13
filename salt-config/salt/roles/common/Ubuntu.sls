@@ -10,13 +10,17 @@ disabled_services:
 # Installs packets.
 {%-for packet in salt['pillar.get']('server:settings:set_default_packets',)%}
 {{packet}}:
-  pkg.installed
+  pkg.latest
 {%- endfor %}
 
 # Apply configuration files.
 ubuntu_apply_configuration:
   file.managed:
     - names:
+      - '/etc/network/interfaces':
+        - source: 'salt://{{slspath}}/files/interfaces'
+      - '/etc/modules':
+        - replace: False
       - '/etc/resolv.conf':
         - source: salt://{{slspath}}/files/resolv.conf
       - '/sbin/call_home':
@@ -28,10 +32,19 @@ ubuntu_apply_configuration:
     - group: root
     - follow_symlinks: False
 
+/etc/modules:
+  file.append:
+    - text: 'bonding'
+
 # Ensure services are running.
 ubuntu_service_running:
   service.running:
-    - name: 'salt-minion'
+    - names:
+      - 'salt-minion'
+      - 'networking':
+        - watch:
+          - file: 'ubuntu_apply_configuration'
+          - file: '/etc/modules'
     - enable: True
 
 # End of configuration file.

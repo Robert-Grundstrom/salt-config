@@ -16,7 +16,12 @@ server:
       - set_aes_passwd: monkeyhasbanana
 
     set_default_packets:
+{%-if salt['grains.get']('os') == "Ubuntu"%}
       - vim
+{%endif%}
+{%-if salt['grains.get']('os') == "CentOS"%}
+      - vim-enhanced
+{%endif%}
       - sudo
       - ntp
       - openssh-server
