@@ -1,8 +1,7 @@
 server:
   settings:
     set_dns:
-      set_search:
-        - blacknet.lan
+      set_search: blacknet.lan
 
       set_server:
         - 172.18.0.254

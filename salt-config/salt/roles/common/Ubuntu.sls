@@ -13,28 +13,6 @@ disabled_services:
   pkg.installed
 {%- endfor %}
 
-# Setup and configure SNMP3 for OP5 monitor.
-{%-if not salt['file.file_exists']('/var/lib/snmp/snmpd.conf')%}
-common_snmp_user:
-  pkg.installed:
-  - pkgs:
-    - 'snmpd'
-
-  service.dead:
-  - name: snmpd
-
-{%-set user = salt['pillar.get']('server:settings:set_snmp_settings:set_snmp_user')%}
-{%-set sha = salt['pillar.get']('server:settings:set_snmp_settings:set_sha_passwd')%}
-{%-set aes = salt['pillar.get']('server:settings:set_snmp_settings:set_aes_passwd')%}
-  file.managed:
-    - name: '/var/lib/snmp/snmpd.conf'
-    - contents: 'createUser {{user}} SHA {{sha}} AES {{aes}}'
-    - template: jinja
-    - mode: 644
-    - user: root
-    - group: root
-{%- endif %}
-
 # Apply configuration files.
 ubuntu_apply_configuration:
   file.managed:
