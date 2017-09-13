@@ -1,7 +1,16 @@
+{%-if salt['grains.get']('os') == "CentOS" %}
+  {%-set service_name = "ntpd"%}
+  {%-set pkg_name = "ntp"%}
+{%endif%}
+{%-if salt['grains.get']('os') == "Ubuntu" %}
+  {%-set service_name = "ntp"%}
+  {%-set pkg_name = "ntp"%}
+{%-endif%}
+
 ntp_install:
   pkg.latest:
     - pkgs:
-      - ntp
+      - {{pkg_name}}
 
 apply_ntp_configuration:
   file.managed:
@@ -16,7 +25,7 @@ apply_ntp_configuration:
 
 service_ntp_running:
   service.running:
-    - name: 'ntp'
+    - name: {{service_name}}
     - enable: True
     - watch:
       - file: apply_ntp_configuration 

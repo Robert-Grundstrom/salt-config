@@ -13,14 +13,10 @@ centos_packets_install:
 centos_apply_configuration:
   file.managed:
     - names:
-      - '/etc/ntp.conf':
-        - source: salt://templates/ntp.conf
       - '/sbin/call_home':
         - contents: 'salt-call --state_output=mixed state.apply'
       - '/etc/resolv.conf':
-        - source: salt://templates/resolv.conf
-      - '/etc/snmp/snmpd.conf':
-        - source: salt://templates/snmpd.conf
+        - source: salt://{{slspath}}/files/resolv.conf
     - mode: 644
     - follow_symlinks: False
     - template: jinja
@@ -32,10 +28,6 @@ centos_service_running:
   service.running:
     - names:
       - 'salt-minion'
-      - 'ntpd':
-        - watch.file: '/etc/ntp.conf'
-      - 'snmpd':
-        - watch.file: '/etc/snmp/snmpd.conf'
     - enable: True
 
 # End of configuration file.

@@ -13,8 +13,8 @@ Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 Defaults env_reset,env_keep=MAINTAINER
 
 # User privilege specification
-{%- for sudo_user in salt['pillar.get']('set_users') %}
-  {%- if salt['pillar.get']('set_users:{}:set_team'.format(sudo_user)) == 'administrator' %}
+{%- for sudo_user in salt['pillar.get']('server:set_users') %}
+  {%- if salt['pillar.get']('server:set_users:{}:set_team'.format(sudo_user)) == 'administrator' %}
 {{sudo_user}} ALL=(ALL) ALL
 {{sudo_user}} ALL=(root) ALL
   {%- endif %}

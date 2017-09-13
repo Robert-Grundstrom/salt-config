@@ -2,25 +2,26 @@
 ---
 # Checks for administrators in pillar files and adds users to server.
 {%set if_master = salt['grains.get']('fqdn')%}
-{%- for user in salt['pillar.get']('set_users') %}
-  {%set if_admin = salt['pillar.get']('set_users:'+user+':set_team')%}
-  {%- if if_admin == "administrator" or if_master == "salt-master.it.op5.com" %}
+{%- for user in salt['pillar.get']('server:set_users') %}
+  {%set if_admin = salt['pillar.get']('server:set_users:'+user+':set_team')%}
+  {%- if if_admin == "administrator" %}
 
 {{user}}:
   group:
     - present
   user.present:
-    - fullname: {{salt['pillar.get']('set_users:'+user+':set_fullname')}} 
+    - fullname: {{salt['pillar.get']('server:set_users:'+user+':set_fullname')}} 
     - shell: /bin/bash
     - home: /home/{{user}}
-    - password: {{salt['pillar.get']('set_default_password')}}
+    - password: {{salt['pillar.get']('server:set_users:'+user+':set_passwd')}}
     - enforce_password: True
     - groups:
       - {{user}}
 
   ssh_auth.present:
+    - comment: 'Adding keys'
     - user: {{user}}
-    - source: salt://.ssh_keys/{{user}}.authkey
+    - source: 'salt://.ssh-keys/{{user}}.auth'
     - config: '%h/.ssh/authorized_keys'
 
   {% endif %}
@@ -37,23 +38,6 @@ sudoers_saltmaster:
     - user: root
     - group: root
     - follow_symlinks: False
-
-# Creates local users if pillar is defined.
-{%- if salt['pillar.get']('set_local_user') %}
-  {%- for local_user in salt['pillar.get']('set_local_user') %}
-{{local_user}}:
-  group:
-    - present
-  user.present:
-    - fullname: {{salt['pillar.get']('set_local_user:'+local_user+':set_fullname')}}
-    - shell: /bin/bash
-    - home: /home/{{local_user}}
-    - password: {{salt['pillar.get']('set_local_user:'+local_user+':set_local_password')}}
-    - enforce_password: True
-    - groups:
-      - {{local_user}}
-  {% endfor %}
-{% endif %}
 
 # Delete users if pillar is defined.
 {%- if salt['pillar.get']('remove_user') %}
