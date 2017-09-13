@@ -1,0 +1,21 @@
+###########################################################################
+# This file is managed by Salt any changes made here will be overwritten. #
+#                                                                         #
+# If changes here are needed then please contact system administrator.    #
+###########################################################################
+
+# Defaults specification
+Defaults env_reset
+Defaults mail_badpass
+Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# User for apt-dater
+Defaults env_reset,env_keep=MAINTAINER
+
+# User privilege specification
+{%- for sudo_user in salt['pillar.get']('set_users') %}
+  {%- if salt['pillar.get']('set_users:{}:set_team'.format(sudo_user)) == 'administrator' %}
+{{sudo_user}} ALL=(ALL) ALL
+{{sudo_user}} ALL=(root) ALL
+  {%- endif %}
+{%- endfor %}
