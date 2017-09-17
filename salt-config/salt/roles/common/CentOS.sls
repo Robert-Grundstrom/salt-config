@@ -10,10 +10,15 @@
 centos_apply_configuration:
   file.managed:
     - names:
-
-      {%for device in salt['pillar.get']('server:settings:network')%}
-      - '/etc/sysconfig/network-scripts/test-ifcfg-{{device}}':
+      {%-for device, value in salt.pillar.get('server:settings:network', {}).iteritems()%}
+      - '/etc/sysconfig/network-scripts/ifcfg-{{device}}':
         - source: salt://{{slspath}}/files/ifcfg-
+        - device: {{device}}
+        - ipaddr: {{value['set_ipaddress']}}
+        - netmask: {{value['set_netmask']}}
+        {%-if value['set_gateway'] is defined%}
+        - gateway: {{value['set_gateway']}}
+        {%-endif%}
       {%endfor%}        
 
       - '/sbin/call_home':
@@ -34,6 +39,10 @@ centos_service_running:
   service.running:
     - names:
       - 'salt-minion'
+#      - 'network':
+#        - reload: True
+#        - watch:
+#          - file: centos_apply_configuration
     - enable: True
 
 # End of configuration file.
