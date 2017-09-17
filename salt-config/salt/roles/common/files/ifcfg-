@@ -1,0 +1,9 @@
+    DEVICE={{salt['pillar.get']('server:settings:network')}}
+    HWADDR=52:54:00:C3:A9:C0
+    TYPE=Ethernet
+    ONBOOT=yes
+    NM_CONTROLLED=no
+    BOOTPROTO=static
+    IPADDR=172.18.0.52
+    NETMASK=255.255.255.0
+    GATEWAY=172.18.0.254

@@ -10,11 +10,19 @@
 centos_apply_configuration:
   file.managed:
     - names:
+
+      {%for device in salt['pillar.get']('server:settings:network')%}
+      - '/etc/sysconfig/network-scripts/test-ifcfg-{{device}}':
+        - source: salt://{{slspath}}/files/ifcfg-
+      {%endfor%}        
+
       - '/sbin/call_home':
         - contents: 'salt-call --state_output=mixed state.apply'
         - mode: 755
+
       - '/etc/resolv.conf':
         - source: salt://{{slspath}}/files/resolv.conf
+
     - mode: 644
     - follow_symlinks: False
     - template: jinja

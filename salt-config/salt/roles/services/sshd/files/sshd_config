@@ -11,8 +11,8 @@
 # ################ #
 
 # Port 22
-ListenAddress {{salt['network.ip_addrs']()|first}}
 AddressFamily inet
+ListenAddress {{salt['network.ip_addrs']()|first}}
 
 # ############ #
 # Key options. #
@@ -62,7 +62,7 @@ AuthorizedKeysFile      .ssh/authorized_keys
 AllowAgentForwarding	yes
 AllowTcpForwarding	yes
 X11UseLocalhost         yes
-PermitTTY               yes
+# PermitTTY               yes
 PrintLastLog            yes
 TCPKeepAlive            yes
 UseDNS                  yes
@@ -77,7 +77,7 @@ ClientAliveInterval	15
 ClientAliveCountMax	3
 MaxStartups		10:30:100
 
-UsePrivilegeSeparation  sandbox
+# UsePrivilegeSeparation  sandbox
 Compression             delayed
 PidFile                 /var/run/sshd.pid
 AcceptEnv               LANG LC_*

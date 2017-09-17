@@ -27,15 +27,14 @@ apply_snmp_config:
     - names:
       - '{{path}}/snmpd.conf':
         - contents: 'createUser {{user}} SHA {{sha}} AES {{aes}}'
-        - watch.pkg: install_snmp_packets
+        - onchanges:
+          - pkg: install_snmp_packets
       - '/etc/snmp/snmpd.conf':
         - source: salt://{{slspath}}/files/snmpd.conf
     - template: jinja
     - mode: 644
     - user: root
     - group: root
-    - onchanges:
-      - pkg: install_snmp_packets
 
 service_snmp_running:
   service.running:
