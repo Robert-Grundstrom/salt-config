@@ -4,7 +4,7 @@
         'network_path': '/etc/network/interfaces',
         'mod_path': '/etc/modules',
         'network_manager': 'NetworkManager',
-        'repo_url': '://repo.saltstack.com/apt/ubuntu/'+osrel+'/amd64/latest',
+        'repo_url': '://repo.saltstack.com/apt/ubuntu/',
     },
     'RedHat': {
         'network': 'network',
@@ -30,7 +30,7 @@
         'network_manager': 'NetworkManager',
         'network': 'networking',
         'network_path': '/etc/network/interfaces',
-        'mod_path': '://repo.saltstack.com/apt/ubuntu/'+osrel+'/amd64/latest',
+        'mod_path': '://repo.saltstack.com/apt/ubuntu/',
     },
 
 }, merge=salt['pillar.get']('os:lookup'))%}
