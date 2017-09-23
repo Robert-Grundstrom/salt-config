@@ -19,12 +19,12 @@ disabled_services:
 apply_configuration:
   file.managed:
     - names:
-      {%if salt['grains.get']('os') == "Ubuntu"%}
+      {%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
       - '{{os.network_path}}':
         - source: 'salt://{{slspath}}/files/interfaces'
       {%endif%}
 
-      {%if salt['grains.get']('os') == "CentOS"%}
+      {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
         {%-for device, value in salt.pillar.get('server:settings:network', {}).iteritems()%}
       - '{{os.network_path}}{{device}}':
         - source: 'salt://{{slspath}}/files/interfaces'
