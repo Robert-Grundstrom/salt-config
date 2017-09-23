@@ -1,0 +1,22 @@
+{% set snmp = salt['grains.filter_by']({
+    'Debian': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+    'RedHat': {
+        'packet': 'net-snmp',
+        'path': '/var/lib/net-snmp'
+    },
+    'OpenBSD': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+    'CentOS': {
+        'packet': 'net-snmp',
+        'path': '/var/lib/net-snmp'
+    },
+    'Ubuntu': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+}, merge=salt['pillar.get']('snmp:lookup'))%}

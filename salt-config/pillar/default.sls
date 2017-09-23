@@ -14,16 +14,16 @@ server:
       - set_snmp_user: rouser
       - set_sha_passwd: monkeylikebanana
       - set_aes_passwd: monkeyhasbanana
+      - set_ipaddr: {{salt['network.ip_addrs']()|first}}
 
-
-{%if salt['grains.get']('os') == "Ubuntu"%}
+{%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
     set_default_packets:
       - vim
       - network-manager
       - sudo
 {%endif%}
 
-{%if salt['grains.get']('os') == "CentOS"%}
+{%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
     set_default_packets:
       - NetworkManager
       - vim-enhanced
