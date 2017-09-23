@@ -1,0 +1,38 @@
+{% set os = salt['grains.filter_by']({
+    'Debian': {
+        'network': 'networking',
+        'network_path': '/etc/network/interfaces',
+        'mod_path': '/etc/modules',
+        'network_manager': 'NetworkManager',
+        'os_type': 'Debian',
+    },
+    'RedHat': {
+        'network': 'network',
+        'network_path': '/etc/sysconfig/network-scripts/ifcfg-',
+        'mod_path': '/etc/modprobe.d/bonding.conf',
+        'network_manager': 'NetworkManager',
+        'os_type': 'RedHat',
+    },
+    'OpenBSD': {
+        'network': 'networking',
+        'network_path': '/etc/network/',
+        'mod_path': '/etc/modules',
+        'network_manager': 'NetworkManager',
+        'os_type': 'OpenBSD',
+    },
+    'CentOS': {
+        'network': 'network',
+        'network_manager': 'NetworkManager',
+        'network_path': '/etc/sysconfig/network-scripts/ifcfg-',
+        'mod_path': '/etc/modprobe.d/bonding.conf',
+        'os_type': 'CentOS',
+    },
+    'Ubuntu': {
+        'network_manager': 'NetworkManager',
+        'network': 'networking',
+        'network_path': '/etc/network/interfaces',
+        'mod_path': '/etc/modules',
+        'os_type': 'Ubuntu',
+    },
+
+}, merge=salt['pillar.get']('os:lookup'))%}

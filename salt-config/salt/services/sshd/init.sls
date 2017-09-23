@@ -1,9 +1,9 @@
-install_base:
+sshd_install_base:
   pkg.latest:
     - pkgs:
       - openssh-server
 
-apply_configuration:
+sshd_apply_configuration:
   file.managed:
     - name: '/etc/ssh/sshd_config'
     - source: salt://{{slspath}}/files/sshd_config
@@ -12,12 +12,12 @@ apply_configuration:
     - group: root
     - template: jinja
 
-services_running:
+sshd_services_running:
   service.running:
     - names: 
       - 'sshd'
     - watch:
-      - pkg: install_base
-      - file: apply_configuration
+      - pkg: sshd_install_base
+      - file: sshd_apply_configuration
     - enable: True
 

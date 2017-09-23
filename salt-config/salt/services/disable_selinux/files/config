@@ -1,0 +1,7 @@
+# ##################################### #
+# This file is managed with salt.       #
+# Any changes here will be overwritten. #
+# ##################################### #
+
+SELINUX=Disabled
+SELINUXTYPE=targeted

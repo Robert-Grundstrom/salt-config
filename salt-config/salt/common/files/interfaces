@@ -1,0 +1,35 @@
+# ################################################################### #
+# This file is managed by salt. Any changes here is going to be       #
+# over written.                                                       #
+#                                                                     #
+# If changes are needed contact the system administrators.            #
+# ################################################################### #
+{%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
+# The loopback network interface
+auto lo
+iface lo inet loopback
+  {%for device, value in salt.pillar.get('server:settings:network', {}).iteritems()%}
+# Interface {{device}}
+auto {{device}} 
+iface {{device}} inet static
+address {{value['set_ipaddress']}}
+netmask {{value['set_netmask']}}
+    {%-if value['set_gateway'] is defined%} 
+gateway {{value['set_gateway']}}
+    {%endif%}
+  {%-endfor%}
+{%-endif%}
+
+{%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
+# Interface {{device}}
+DEVICE={{device}}
+TYPE=Ethernet
+ONBOOT=yes
+NM_CONTROLLED=no
+BOOTPROTO=static
+IPADDR={{ipaddr}}
+NETMASK={{netmask}}
+  {%-if gateway is defined%}
+GATEWAY={{gateway}}
+  {%-endif%}
+{%-endif%}

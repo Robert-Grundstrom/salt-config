@@ -15,13 +15,17 @@ server:
       - set_sha_passwd: monkeylikebanana
       - set_aes_passwd: monkeyhasbanana
 
+
+{%if salt['grains.get']('os') == "Ubuntu"%}
     set_default_packets:
-{%-if salt['grains.get']('os') == "Ubuntu"%}
       - vim
-{%endif%}
-{%-if salt['grains.get']('os') == "CentOS"%}
-      - vim-enhanced
-{%endif%}
+      - network-manager
       - sudo
-      - ntp
-      - openssh-server
+{%endif%}
+
+{%if salt['grains.get']('os') == "CentOS"%}
+    set_default_packets:
+      - NetworkManager
+      - vim-enhanced
+      - sudo
+{%endif%}

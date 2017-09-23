@@ -1,5 +1,5 @@
 base:
   '*':
-  - roles.common
+  - common
   - roles.groups.administrator
-  - roles.services
+  - services

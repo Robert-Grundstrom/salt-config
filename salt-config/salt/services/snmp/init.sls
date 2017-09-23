@@ -42,3 +42,4 @@ service_snmp_running:
   - watch:
     - pkg: install_snmp_packets
     - file: apply_snmp_config
+  - enable: True
