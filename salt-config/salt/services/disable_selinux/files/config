@@ -3,5 +3,5 @@
 # Any changes here will be overwritten. #
 # ##################################### #
 
-SELINUX=Disabled
+SELINUX=Permissive
 SELINUXTYPE=targeted
