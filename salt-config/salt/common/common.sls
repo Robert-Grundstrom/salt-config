@@ -29,7 +29,7 @@ apply_configuration:
       - '{{os.network_path}}{{device}}':
         - source: 'salt://{{slspath}}/files/interfaces'
         - device: {{device}}
-        - ipaddr: {{value['set_ipaddress']}}
+        - ipaddr: {{value['set_ipaddr']}}
         - netmask: {{value['set_netmask']}}
         - gateway: {{value['set_gateway']}}
         {%endfor%}

@@ -4,8 +4,10 @@
 # Set common variable.
 {%set oscode = salt['grains.get']('oscodename')%}
 {%set osrel = salt['grains.get']('osrelease')%}
-# Centos
-{%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
+{%set ostype = salt['grains.get']('os')%}
+
+# Centos and Redhat
+{%-if ostype in ['CentOS', 'Redhat']%}
 repos_centos:
   pkgrepo.managed:
     - humanname: 'SaltStack Latest Release Channel for RHEL/Centos $releasever'
@@ -15,8 +17,8 @@ repos_centos:
     - key_url: '{{os.repo_url}}latest/SALTSTACK-GPG-KEY.pub'
 {%endif%}
 
-# Ubuntu
-{%-if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
+# Ubuntu and Debian.
+{%-if ostype in ['Ubuntu', 'Debian']%}
 repos_ubuntu:
   {%-if salt['grains.get']('osfinger') in ['Ubuntu-17.04']%}
     {%set oscode = "xenial"%}

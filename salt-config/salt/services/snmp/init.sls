@@ -1,9 +1,10 @@
 {% from slspath + '/map.jinja' import snmp with context %}
-{%-set user = salt['pillar.get']('server:settings:set_snmp_settings:set_snmp_user')%}
-{%-set sha = salt['pillar.get']('server:settings:set_snmp_settings:set_sha_passwd')%}
-{%-set aes = salt['pillar.get']('server:settings:set_snmp_settings:set_aes_passwd')%}
+{%-set usr = salt['pillar.get']('server:settings:set_snmp:snmp_usr')%}
+{%-set sha = salt['pillar.get']('server:settings:set_snmp:snmp_sha')%}
+{%-set aes = salt['pillar.get']('server:settings:set_snmp:snmp_aes')%}
+{%-set snmp_ip = salt['pillar.get']('server:settings:set_snmp:snmp_ip', '0.0.0.0')%}
 
-install_snmp_packets:
+snmp_pkgs:
   pkg.latest:
     - pkgs:
       - {{snmp.packet}}
@@ -11,27 +12,29 @@ install_snmp_packets:
   service.dead:
     - name: snmpd
     - onchanges:
-      - pkg: install_snmp_packets
+      - pkg: snmp_pkgs
 
-apply_snmp_config:
+snmp_config:
   file.managed:
     - names:
       - '{{snmp.path}}/snmpd.conf':
-        - contents: 'createUser {{user}} SHA {{sha}} AES {{aes}}'
+        - contents: 'createUser {{usr}} SHA {{sha}} AES {{aes}}'
         - onchanges:
-          - pkg: install_snmp_packets
+          - pkg: snmp_pkgs
+
       - '/etc/snmp/snmpd.conf':
         - source: salt://{{slspath}}/files/snmpd.conf
-        - set_ipaddr: {{salt['network.ip_addrs']()|first}}
+        - snmp_ip: {{snmp_ip}}
+        - usr: {{usr}}
     - template: jinja
     - mode: 644
     - user: root
     - group: root
 
-service_snmp_running:
+snmp_service:
   service.running:
   - name: snmpd
   - watch:
-    - pkg: install_snmp_packets
-    - file: apply_snmp_config
+    - pkg: snmp_pkgs
+    - file: snmp_config
   - enable: True

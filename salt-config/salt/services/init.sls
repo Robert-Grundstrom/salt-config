@@ -3,3 +3,4 @@ include:
   - {{slspath}}.snmp
   - {{slspath}}.ntp
   - {{slspath}}.disable_selinux
+  - {{slspath}}.firewall

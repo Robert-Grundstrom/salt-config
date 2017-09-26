@@ -12,12 +12,12 @@ iface lo inet loopback
 # Interface {{device}}
 auto {{device}} 
 iface {{device}} inet static
-address {{value['set_ipaddress']}}
+address {{value['set_ipaddr']}}
 netmask {{value['set_netmask']}}
     {%-if value['set_gateway'] is defined%} 
 gateway {{value['set_gateway']}}
     {%endif%}
-  {%-endfor%}
+  {%endfor%}
 {%-endif%}
 
 {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
