@@ -1,16 +1,8 @@
-{%-if salt['grains.get']('os') == "CentOS" %}
-  {%-set service_name = "ntpd"%}
-  {%-set pkg_name = "ntp"%}
-{%endif%}
-{%-if salt['grains.get']('os') == "Ubuntu" %}
-  {%-set service_name = "ntp"%}
-  {%-set pkg_name = "ntp"%}
-{%-endif%}
-
+{% from slspath + '/map.jinja' import ntp with context %}
 ntp_install:
   pkg.latest:
     - pkgs:
-      - {{pkg_name}}
+      - {{ntp.packet}}
 
 apply_ntp_configuration:
   file.managed:
@@ -25,7 +17,7 @@ apply_ntp_configuration:
 
 service_ntp_running:
   service.running:
-    - name: {{service_name}}
+    - name: {{ntp.service}}
     - enable: True
     - watch:
       - file: apply_ntp_configuration 

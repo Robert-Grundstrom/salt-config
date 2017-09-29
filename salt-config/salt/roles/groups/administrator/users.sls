@@ -1,10 +1,8 @@
 # Add administration users to servers.
 ---
 # Checks for administrators in pillar files and adds users to server.
-{%set if_master = salt['grains.get']('fqdn')%}
 {%- for user in salt['pillar.get']('server:set_users') %}
-  {%set if_admin = salt['pillar.get']('server:set_users:'+user+':set_team')%}
-  {%- if if_admin == "administrator" %}
+  {%- if salt['pillar.get']('server:set_users:'+user+':set_team') == "administrator" %}
 
 {{user}}:
   group:
