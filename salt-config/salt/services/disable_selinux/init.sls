@@ -1,6 +1,5 @@
 # selinux is broken for ubuntu so ignoring.
-{%if not salt['grains.get']('os') == "Ubuntu"%}
-
+{%if not salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
 install_dependecys:
   pkg.latest:
   - pkgs:
