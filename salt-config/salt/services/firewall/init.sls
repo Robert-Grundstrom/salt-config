@@ -17,6 +17,7 @@ set_fwchains:
   - names:
     - 'DEFAULT'
     - 'CUSTOM'
+    - 'LOGDROP'
   - family: 'ipv4'
 
 set_fwrules:
@@ -30,19 +31,17 @@ set_fwrules:
       - jump: 'CUSTOM'
     - 'related-established':
       - position: 1
-      - chain: 'DEFAULT'
       - connstate: 'NEW,ESTABLISHED'
     - 'loopback':
       - position: 2
       - i: lo
-      - chain: 'DEFAULT'
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
     - 'SNMP':
       - position: 3
-      - chain: 'DEFAULT'
       - dport: '161'
       - proto: 'tcp'
+  - chain: 'DEFAULT'
   - jump: 'ACCEPT'
   - save: True
 
@@ -53,7 +52,7 @@ set_fwrules:
 
 {{val1+'/'+val2+'/src:'+val3}}:
   iptables.append:
-  - chain: 'Custom-Input'
+  - chain: 'CUSTOM'
   - proto: {{val1}}
   - dport: {{val2}}
   - source: {{val3}}

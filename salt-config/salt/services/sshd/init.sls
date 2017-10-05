@@ -27,14 +27,6 @@ install_sshd_pkgs:
 # server. (Default this is set to 0.0.0.0/0)
 
 {%if salt['pillar.get']('server:settings:hardned_ssh:enable') == True%}
-set_sshd_fwchains:
-  iptables.chain_present:
-  - names:
-    - 'DEFAULT'
-    - 'CUSTOM'
-    - 'LOGDROP'
-  - family: 'ipv4'
-
   {%set interface = salt['pillar.get']('server:settings:hardned_ssh:interface')%}
 set_sshd_fwrule:
   iptables.append:
@@ -86,7 +78,7 @@ set_sshd_fwrule:
   iptables.append:
   - names:
     - 'sshd TCP/22':
-      - chain: 'Default-Input'
+      - chain: 'DEFAULT'
       - dport: 22
       - proto: tcp
   - table: filter
