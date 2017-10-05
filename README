@@ -1,0 +1,18 @@
+This is a small projekt that should serve as a baseline
+for Linux servers. The idea is to use Saltstack to setup
+Network, NTP, SSH, SNMPv3, Firewall in a correct way as
+well as bump up the security of the clients.
+
+In my experience ive seen a lot of diffrent enviorments
+and none of them are thinking about the basic security 
+options that should be standard in todays IT enviorments.
+
+Every company out there that ive come accross has a firewall
+beetween the Internet and the local network. But many attacks
+today come from the inside of the company and the damage
+of internal attacks can be minimized by setting up basic security.
+
+Reason i choose to include SNMPv3 in this is for monitoring purpose.
+Zabbix and OP5 is the most common tools that ive come accross that 
+is used and with SNMPv3 you can monitor your services with a secure
+and encrypted way that is supported by thease tools.
