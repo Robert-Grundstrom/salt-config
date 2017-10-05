@@ -1,3 +1,6 @@
+USING THIS IS AT YOUR OWN RISK!
+I WILL NOT TAKE RESPONSABILITY IF YOU BREAK YOUR SYSTEM!
+
 This is a small projekt that should serve as a baseline
 for Linux servers. The idea is to use Saltstack to setup
 Network, NTP, SSH, SNMPv3, Firewall in a correct way as
@@ -20,3 +23,22 @@ and encrypted way that is supported by thease tools.
 Before you start using this make sure that pillars are matching your
 enviorment and purposes. Otherwise you might break your system or
 lock yourself out.
+
+My test enviorment consists of:
+ - ubuntu16 / Ubuntu 16
+ - salt-master / Ubuntu 17
+ - centos6 / CentOS 6
+ - centos7 / CentOS 7
+
+Im working to make sure that the code always works on the lab
+enviorment but at some times there are situations when there
+are diviation.
+
+Im planning on making test and ensure it will work for:
+ - Redhat 6, 7
+ - Debian 7, 8
+ - OpenBSD 6
+
+If you have suggestions or improvments on what im doing here please
+submit them in an issue or a pull request and I will review them
+and consider them for merging.
