@@ -9,6 +9,11 @@ server:
       - ntp1.sth.netnod.se
       - ntp2.sth.netnod.se
 
+    hardned_ssh:
+      - enable: False
+      - source: 0.0.0.0/0
+#      - interface: ens3  
+
 # By default firewall is set to Disable.
 # Salt will still write the rules. But
 # policy will be accept for all incoming chains.
@@ -21,7 +26,7 @@ server:
       - snmp_usr: rouser
       - snmp_sha: monkeylikebanana
       - snmp_aes: monkeyhasbanana
-#      - snmp_ip: 0.0.0.0
+      - snmp_ip: 0.0.0.0
 
 # Ubuntu and Debian packages.
 {%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}

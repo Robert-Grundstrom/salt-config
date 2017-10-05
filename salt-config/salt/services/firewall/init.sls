@@ -9,16 +9,14 @@ fwpkg_dep:
 {%-if not salt['grains.get']('os') in ['CentOS', 'Redhat']%}
     - iptables-persistent
 {%endif%}
+
 # Setting up the chains we will be using.
-# Default is the common rules, it contains the new,established and port 22
-# for SSH connection. This is hardcoded to avoid accidental lockout.
-# 
 # Custom is used for the rules that are set in the pillar files.
 set_fwchains:
   iptables.chain_present:
   - names:
-    - 'Default-Input'
-    - 'Custom-Input'
+    - 'DEFAULT'
+    - 'CUSTOM'
   - family: 'ipv4'
 
 set_fwrules:
@@ -26,23 +24,26 @@ set_fwrules:
   - names:
     - 'Default Accept':
       - chain: 'INPUT'
-      - jump: 'Default-Input'
+      - jump: 'DEFAULT'
     - 'Custom Accept':
       - chain: 'INPUT'
-      - jump: 'Custom-Input'
+      - jump: 'CUSTOM'
     - 'related-established':
-      - chain: 'Default-Input'
-      - connstate: NEW,ESTABLISHED
-      - jump: ACCEPT
+      - position: 1
+      - chain: 'DEFAULT'
+      - connstate: 'NEW,ESTABLISHED'
     - 'loopback':
-      - name: 'Allow for lo'
+      - position: 2
       - i: lo
-      - chain: 'Default-Input'
-    - 'sshd TCP/22':
-      - chain: 'Default-Input'
-      - dport: 22
-      - proto: tcp
-  - table: filter
+      - chain: 'DEFAULT'
+      - jump: 'ACCEPT'
+      - comment: "Accept lo traffic"
+    - 'SNMP':
+      - position: 3
+      - chain: 'DEFAULT'
+      - dport: '161'
+      - proto: 'tcp'
+  - jump: 'ACCEPT'
   - save: True
 
 # Setting the custom rules of the server defined by pillar.

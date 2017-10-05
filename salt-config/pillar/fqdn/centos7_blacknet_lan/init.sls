@@ -8,3 +8,8 @@ server:
         set_gateway: 172.18.0.254
 
     fw_enable: True
+
+    hardned_ssh:
+      - enable: True
+      - source: 172.18.0.0/24
+#      - interface: ens3
