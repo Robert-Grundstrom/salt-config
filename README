@@ -16,3 +16,7 @@ Reason i choose to include SNMPv3 in this is for monitoring purpose.
 Zabbix and OP5 is the most common tools that ive come accross that 
 is used and with SNMPv3 you can monitor your services with a secure
 and encrypted way that is supported by thease tools.
+
+Before you start using this make sure that pillars are matching your
+enviorment and purposes. Otherwise you might break your system or
+lock yourself out.
