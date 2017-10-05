@@ -5,9 +5,10 @@
 fwpkg_dep:
   pkg.latest:
   - pkgs:
-    - iptables-persistent
     - iptables
-
+{%-if not salt['grains.get']('os') in ['CentOS', 'Redhat']%}
+    - iptables-persistent
+{%endif%}
 # Setting up the chains we will be using.
 # Default is the common rules, it contains the new,established and port 22
 # for SSH connection. This is hardcoded to avoid accidental lockout.
@@ -34,6 +35,7 @@ set_fwrules:
       - connstate: NEW,ESTABLISHED
       - jump: ACCEPT
     - 'loopback':
+      - name: 'Allow for lo'
       - i: lo
       - chain: 'Default-Input'
     - 'sshd TCP/22':
