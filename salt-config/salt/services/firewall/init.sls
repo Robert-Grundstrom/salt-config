@@ -1,3 +1,4 @@
+{%set firewall = salt['pillar.get']('server:settings:firewall:rules', {})%}
 # iptables is used as a firewall for clients.
 # This is for ipv4 only!
 # 
@@ -29,6 +30,15 @@ set_fwrules:
     - 'Custom Accept':
       - chain: 'INPUT'
       - jump: 'CUSTOM'
+    - 'LOG-LOGDROP':
+      - jump: 'LOG'
+      - chain: 'LOGDROP'
+    - 'DROP-LOGDROP':
+      - jump: 'DROP'
+      - chain: 'LOGDROP'
+
+# Allow NEW,ESTABLISHED.
+# Allow lo interface.
     - 'related-established':
       - position: 1
       - connstate: 'NEW,ESTABLISHED'
@@ -37,17 +47,13 @@ set_fwrules:
       - i: lo
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
-    - 'SNMP':
-      - position: 3
-      - dport: '161'
-      - proto: 'tcp'
   - chain: 'DEFAULT'
   - jump: 'ACCEPT'
   - save: True
 
 # Setting the custom rules of the server defined by pillar.
-{%if salt['pillar.get']('server:settings:firewall:rules') is defined%}
-  {%for i in salt['pillar.get']('server:settings:firewall:rules', {})%}
+{%if firewall is defined%}
+  {%for i in firewall%}
     {%set val1, val2, val3 = i.split(',')%}
 
 {{val1+'/'+val2+'/src:'+val3}}:

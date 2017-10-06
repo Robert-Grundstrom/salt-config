@@ -31,12 +31,6 @@ install_sshd_pkgs:
 set_sshd_fwrule:
   iptables.append:
   - names:
-    - 'LOG-LOGDROP':
-      - jump: 'LOG'
-      - chain: 'LOGDROP'
-    - 'DROP-LOGDROP':
-      - jump: 'DROP'
-      - chain: 'LOGDROP'
     - 'sshd TCP/22/1:':
       - position: 4
       - match: 'recent --set'
@@ -50,30 +44,16 @@ set_sshd_fwrule:
       - jump: 'LOGDROP'
       - connstate: 'NEW'
       - dport: '22'
-    - 'DROP':
-      - position: 200
-      - chain: 'INPUT'
-      - jump: 'DROP'
-      - comment: "Drop everything else"
   - chain: 'DEFAULT'
   - proto: 'tcp'
-
-# {%if interface is defined%}
-#   - i: {{interface}}
-# {%endif%}
   - table: filter
   - save: True
-
-apply_sshd_config:
-  file.managed:
-    - name: '/etc/ssh/sshd_config'
-    - source: salt://{{slspath}}/files/sshd_config
-    - mode: 644
-    - user: root
-    - group: root
-    - template: jinja
+  {%if interface is defined%}
+  - i: {{interface}}
+  {%endif%}
 
 {%else%}
+
 set_sshd_fwrule:
   iptables.append:
   - names:
@@ -83,6 +63,7 @@ set_sshd_fwrule:
       - proto: tcp
   - table: filter
   - save: True
+{%endif%}
 
 apply_sshd_config:
   file.managed:
@@ -92,8 +73,6 @@ apply_sshd_config:
     - user: root
     - group: root
     - template: jinja
-
-{%endif%}
 
 sshd_services_running:
   service.running:

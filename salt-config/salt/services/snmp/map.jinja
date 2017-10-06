@@ -19,4 +19,12 @@
         'packet': 'snmpd',
         'path': '/var/lib/snmp'
     },
-}, merge=salt['pillar.get']('snmp:lookup'))%}
+}, merge=salt['grains.filter_by']({
+    '*': {
+        'user': salt['pillar.get']('server:settings:set_snmp:snmp_usr', 'rouser'),
+        'sha': salt['pillar.get']('server:settings:set_snmp:snmp_sha', 'monkeylikebanana'), 
+        'aes': salt['pillar.get']('server:settings:set_snmp:snmp_aes', 'monkeyhasbanana'),
+        'snmp_ip': salt['pillar.get']('server:settings:set_snmp:snmp_ip', '0.0.0.0'),
+        'monitor_ip': salt['pillar.get']('monitor:servers', {}),
+    },
+}, merge=salt['pillar.get']('snmp:lookup')))%}
