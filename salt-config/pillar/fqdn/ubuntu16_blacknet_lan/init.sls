@@ -28,8 +28,8 @@ server:
       - interface: ens3
 
 # Firewall settings:
-#    firewall:
-#      - enable: False
+    firewall:
+      - enable: True
 #      - rules:
 
 # SNMP settings:

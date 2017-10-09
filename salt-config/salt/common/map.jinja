@@ -4,14 +4,18 @@
         'network_path': '/etc/network/interfaces',
         'mod_path': '/etc/modules',
         'network_manager': 'NetworkManager',
-        'repo_url': '://repo.saltstack.com/apt/ubuntu/',
+        'repo_key': 'https://repo.saltstack.com/apt/ubuntu/'+salt['grains.get']('osrelease')+
+'/amd64/latest/SALTSTACK-GPG-KEY.pub',
+        'repo_url': 'deb http://repo.saltstack.com/apt/'+salt['grains.get']('osrelease')+
+'/amd64/latest '+salt['grains.get']('osrelease')+' main',
     },
     'RedHat': {
         'network': 'network',
+        'network_manager': 'NetworkManager',
         'network_path': '/etc/sysconfig/network-scripts/ifcfg-',
         'mod_path': '/etc/modprobe.d/bonding.conf',
-        'network_manager': 'NetworkManager',
-        'repo_url': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/',
+        'repo_key': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest/SALTSTACK-GPG-KEY.pub',
+        'repo_url': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest',
     },
     'OpenBSD': {
         'network': 'networking',
@@ -24,13 +28,17 @@
         'network_manager': 'NetworkManager',
         'network_path': '/etc/sysconfig/network-scripts/ifcfg-',
         'mod_path': '/etc/modprobe.d/bonding.conf',
-        'repo_url': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/',
+        'repo_key': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest/SALTSTACK-GPG-KEY.pub',
+        'repo_url': 'https://repo.saltstack.com/yum/redhat/$releasever/$basearch/latest',
     },
     'Ubuntu': {
-        'network_manager': 'NetworkManager',
         'network': 'networking',
         'network_path': '/etc/network/interfaces',
-        'mod_path': '://repo.saltstack.com/apt/ubuntu/',
+        'mod_path': '/etc/modules',
+        'network_manager': 'NetworkManager',
+        'repo_key': 'https://repo.saltstack.com/apt/ubuntu/'+salt['grains.get']('osrelease')+
+'/amd64/latest/SALTSTACK-GPG-KEY.pub',
+        'repo_url': 'deb http://repo.saltstack.com/apt/'+salt['grains.get']('osrelease')+
+'/amd64/latest '+salt['grains.get']('osrelease')+' main',
     },
-
 }, merge=salt['pillar.get']('os:lookup'))%}

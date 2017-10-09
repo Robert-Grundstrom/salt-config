@@ -33,15 +33,14 @@ set_fwrules:
     - 'LOG-LOGDROP':
       - jump: 'LOG'
       - chain: 'LOGDROP'
+      - log-prefix: '[netfilter] '
+      - log-level: '7'
     - 'DROP-LOGDROP':
-      - jump: 'DROP'
+      - jump: 'DROP' 
       - chain: 'LOGDROP'
-
-# Allow NEW,ESTABLISHED.
-# Allow lo interface.
     - 'related-established':
       - position: 1
-      - connstate: 'NEW,ESTABLISHED'
+      - connstate: 'RELATED,ESTABLISHED'
     - 'loopback':
       - position: 2
       - i: lo
@@ -73,7 +72,7 @@ set_fwpolicys:
   - chain: 'INPUT'
   - table: filter
   - family: ipv4
-{%if salt['pillar.get']('server:settings:fw_enable') == True%}
+{%if salt['pillar.get']('server:settings:firewall:enable') == True%}
   - policy: DROP
 {%else%}
   - policy: ACCEPT

@@ -14,20 +14,8 @@ install_sshd_pkgs:
   pkg.latest:
     - pkgs:
       - openssh-server
+      - rsyslog
 
-# The hardned ssh in this case will set another rule to the iptables.
-# The new rule will effectivly slow down connection attempts towards
-# the standard ssh port (TCP/22) this will prevent any attempts to
-# bruteforce your SSH password.
-#
-# We will also add logging of droped connection atempts.
-#
-# We will also set the option to restrict SSH access to a ipaddress.
-# This will ensure that only a specific ip, ip range can access the 
-# server. (Default this is set to 0.0.0.0/0)
-
-{%if salt['pillar.get']('server:settings:hardned_ssh:enable') == True%}
-  {%set interface = salt['pillar.get']('server:settings:hardned_ssh:interface')%}
 set_sshd_fwrule:
   iptables.append:
   - names:
@@ -39,7 +27,7 @@ set_sshd_fwrule:
       - dport: '22'
     - 'sshd TCP/22':
       - position: 5
-      - match: 'recent --update --seconds 60 --hitcount 4'
+      - match: 'recent --update --seconds 30 --hitcount 4'
       - source: {{salt['pillar.get']('server:settings:hardned_ssh:source')}}
       - jump: 'LOGDROP'
       - connstate: 'NEW'
@@ -52,23 +40,19 @@ set_sshd_fwrule:
   - i: {{interface}}
   {%endif%}
 
-{%else%}
-
-set_sshd_fwrule:
-  iptables.append:
-  - names:
-    - 'sshd TCP/22':
-      - chain: 'DEFAULT'
-      - dport: 22
-      - proto: tcp
-  - table: filter
-  - save: True
-{%endif%}
-
 apply_sshd_config:
   file.managed:
-    - name: '/etc/ssh/sshd_config'
-    - source: salt://{{slspath}}/files/sshd_config
+    - names:
+      - '/etc/ssh/sshd_config':
+        - source: salt://{{slspath}}/files/sshd_config
+      - '/etc/rsyslog.d/30-iptables.conf':
+        - contents: ':msg,contains,"[netfilter] " /var/log/iptables.log'
+      - '/var/log/iptables.log':
+        - create: True
+        - mode: 640
+        - user: syslog
+        - group: adm
+        - replace: False
     - mode: 644
     - user: root
     - group: root
@@ -77,8 +61,11 @@ apply_sshd_config:
 sshd_services_running:
   service.running:
     - names: 
-      - 'sshd'
-    - watch:
-      - pkg: install_sshd_pkgs
-      - file: apply_sshd_config
+      - 'sshd':
+        - watch:
+          - pkg: install_sshd_pkgs
+          - file: apply_sshd_config
+      - 'rsyslog':
+        - watch:
+          - file: apply_sshd_config
     - enable: True
