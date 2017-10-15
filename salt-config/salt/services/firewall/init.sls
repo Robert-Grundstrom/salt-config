@@ -16,44 +16,37 @@ fwpkg_dep:
 set_fwchains:
   iptables.chain_present:
   - names:
-    - 'DEFAULT'
     - 'CUSTOM'
-    - 'LOGDROP'
   - family: 'ipv4'
 
 set_fwrules:
-  iptables.append:
+  iptables.insert:
   - names:
-    - 'Default Accept':
-      - chain: 'INPUT'
-      - jump: 'DEFAULT'
-    - 'Custom Accept':
-      - chain: 'INPUT'
-      - jump: 'CUSTOM'
-    - 'LOG-LOGDROP':
-      - jump: 'LOG'
-      - chain: 'LOGDROP'
-      - log-prefix: '[netfilter] '
-      - log-level: '7'
-    - 'DROP-LOGDROP':
-      - jump: 'DROP' 
-      - chain: 'LOGDROP'
     - 'related-established':
-      - position: 1
-      - connstate: 'RELATED,ESTABLISHED'
+      - position: '1'
+      - connstate: 'ESTABLISHED,RELATED'
+
     - 'loopback':
-      - position: 2
+      - position: '2'
       - i: lo
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
-  - chain: 'DEFAULT'
+
+    - 'Custom Accept':
+      - position: '3'
+      - chain: 'INPUT'
+      - jump: 'CUSTOM'
+      - comment: 'Jump to Salt Custom rules.'
+
+  - table: 'filter'
+  - chain: 'INPUT'
   - jump: 'ACCEPT'
   - save: True
 
 # Setting the custom rules of the server defined by pillar.
-{%if firewall is defined%}
-  {%for i in firewall%}
-    {%set val1, val2, val3 = i.split(',')%}
+{%-if firewall is defined%}
+  {%-for i in firewall%}
+    {%-set val1, val2, val3 = i.split(',')%}
 
 {{val1+'/'+val2+'/src:'+val3}}:
   iptables.append:
@@ -61,8 +54,8 @@ set_fwrules:
   - proto: {{val1}}
   - dport: {{val2}}
   - source: {{val3}}
-  {%endfor%}
-{%endif%}
+  {%-endfor%}
+{%-endif%}
 
 # Here we have fw_enable pillar setting regarding if the DROP policy to
 # the INPUT chain. (Default False) This is used to avoid accidental lockout.
@@ -72,8 +65,8 @@ set_fwpolicys:
   - chain: 'INPUT'
   - table: filter
   - family: ipv4
-{%if salt['pillar.get']('server:settings:firewall:enable') == True%}
+{%-if salt['pillar.get']('server:settings:firewall:enable') == True%}
   - policy: DROP
-{%else%}
+{%-else%}
   - policy: ACCEPT
-{%endif%}
+{%-endif%}

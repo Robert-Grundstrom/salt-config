@@ -16,29 +16,48 @@ install_sshd_pkgs:
       - openssh-server
       - rsyslog
 
+set_sshd_fwchains:
+  iptables.chain_present:
+  - names:
+    - 'SSHSCAN'
+  - family: 'ipv4'
+
 set_sshd_fwrule:
   iptables.append:
   - names:
-    - 'sshd TCP/22/1:':
-      - position: 4
-      - match: 'recent --set'
-      - source: {{salt['pillar.get']('server:settings:hardned_ssh:source')}}
-      - connstate: 'NEW'
+    - 'SSH Connections':
+      - chain: 'INPUT'
+      - jump: 'SSHSCAN'
+      - i: '!lo'
       - dport: '22'
-    - 'sshd TCP/22':
-      - position: 5
-      - match: 'recent --update --seconds 30 --hitcount 4'
-      - source: {{salt['pillar.get']('server:settings:hardned_ssh:source')}}
-      - jump: 'LOGDROP'
       - connstate: 'NEW'
-      - dport: '22'
-  - chain: 'DEFAULT'
+      - match: state
+
+    - 'SSHD resource':
+      - match: 'recent --set --name SSH --rsource'
+      - connstate: 'NEW'
+
+    - 'SSHD rule 1':
+      - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
+      - jump: 'LOG'
+      - log-prefix: '[SSH Brute-Force attempt:] '
+      - log-level: '7'
+
+    - 'SSHD Drop':
+      - jump: 'REJECT'
+      - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
+      - connstate: 'NEW'
+
+{%for source in salt['pillar.get']('server:settings:ssh_config:source')%}
+    - 'Accept {{source}}':
+      - jump: 'ACCEPT'
+      - source: {{source}}
+{%endfor%}
+ 
+  - chain: 'SSHSCAN'
   - proto: 'tcp'
   - table: filter
   - save: True
-  {%if interface is defined%}
-  - i: {{interface}}
-  {%endif%}
 
 apply_sshd_config:
   file.managed:
@@ -46,7 +65,7 @@ apply_sshd_config:
       - '/etc/ssh/sshd_config':
         - source: salt://{{slspath}}/files/sshd_config
       - '/etc/rsyslog.d/30-iptables.conf':
-        - contents: ':msg,contains,"[netfilter] " /var/log/iptables.log'
+        - contents: ':msg,contains,"[SSH Brute-Force attempt:] " /var/log/iptables.log'
       - '/var/log/iptables.log':
         - create: True
         - mode: 640

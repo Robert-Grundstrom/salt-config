@@ -22,14 +22,14 @@ server:
 
 # If enabled sets a harder configuration for
 # the SSH deamon service.
-    hardned_ssh:
-      - enable: True
-      - source: 172.18.0.0/24
+    ssh_config:
+      - source:
+        - 172.18.0.0/24
       - interface: ens3
 
 # Firewall settings:
     firewall:
-      - enable: True
+      - enable: False
       - rules:
         - 'TCP,4505,172.18.0.0/24'
         - 'TCP,4506,172.18.0.0/24'

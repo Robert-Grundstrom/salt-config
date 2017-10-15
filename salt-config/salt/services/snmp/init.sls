@@ -44,7 +44,7 @@ set_SNMP_fwrule_{{snmp.monitor_ip}}:
   {%for monitor in snmp.monitor_ip%}
   - source: {{monitor}}/32
   {%endfor%}
-  - chain: 'DEFAULT'
+  - chain: 'INPUT'
   - jump: 'ACCEPT'
   - save: True
 
