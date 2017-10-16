@@ -20,8 +20,7 @@ server:
       - ntp1.sth.netnod.se
       - ntp2.sth.netnod.se
 
-# If enabled sets a harder configuration for
-# the SSH deamon service.
+# SSHD Options:
     ssh_config:
       - source:
         - 172.18.0.0/24
@@ -29,7 +28,7 @@ server:
 
 # Firewall settings:
     firewall:
-      - enable: False
+      - enable: True
       - rules:
         - 'TCP,4505,172.18.0.0/24'
         - 'TCP,4506,172.18.0.0/24'
@@ -48,9 +47,7 @@ server:
       - network-manager
       - sudo
 
-# For added security, uncomment the following lines
-# and add the ip-addresses to your monitor server.
-# (OP5, Zabbix servers.)
+# OP5, Zabbix servers:
 monitor:
   servers:
     - '172.18.0.60'
