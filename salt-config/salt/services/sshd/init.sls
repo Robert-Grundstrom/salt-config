@@ -1,58 +1,58 @@
-# As an extra layer of protection you can set the hardned_ssh to
-# 'True' in your pillar files. This will set a more restricted
-# configuration as well as added security to the iptables rules.
-#
-# This should not be needed if you dont have an open port for SSH
-# access to the Internet. Some general advice regarding having SSH
-# open towards the internet.
-#
-# - Don't use the default port. (TCP/22)
-# - Force certificate login.
-# - Disable passwords.
+# SSHD configuration.
 
+# Intalling and keeping service up to date.
 install_sshd_pkgs:
   pkg.latest:
     - pkgs:
       - openssh-server
       - rsyslog
 
+# Set up a iptables chain for the service.
 set_sshd_fwchains:
   iptables.chain_present:
   - names:
     - 'SSHSCAN'
   - family: 'ipv4'
 
-set_sshd_fwrule:
+# Set up the iptable rules.
+set_sshd_chainrule:
   iptables.append:
-  - names:
-    - 'SSH Connections':
-      - chain: 'INPUT'
-      - jump: 'SSHSCAN'
-      - i: '!lo'
-      - dport: '22'
-      - connstate: 'NEW'
-      - match: state
+  - name: 'SSH Connections'
+  - chain: 'INPUT'
+  - jump: 'SSHSCAN'
+  - i: '!lo'
+  - dport: '22'
+  - connstate: 'NEW'
+  - match: 'state'
+  - proto: 'tcp'
+  - table: filter
+  - save: True
 
-    - 'SSHD resource':
+set_sshd_fwrules:
+  iptables.insert:
+  - names:
+    - 'SSHD Set':
+      - position: '1'
       - match: 'recent --set --name SSH --rsource'
       - connstate: 'NEW'
 
-    - 'SSHD rule 1':
+    - 'SSHD Log':
+      - position: '2'
       - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
       - jump: 'LOG'
       - log-prefix: '[SSH Brute-Force attempt:] '
       - log-level: '7'
 
     - 'SSHD Drop':
+      - position: '3'
       - jump: 'REJECT'
       - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
       - connstate: 'NEW'
 
-{%for source in salt['pillar.get']('server:settings:ssh_config:source')%}
-    - 'Accept {{source}}':
+    - 'SSHD Accept':
+      - position: '4'
       - jump: 'ACCEPT'
-      - source: {{source}}
-{%endfor%}
+      - source: {{salt['pillar.get']('server:settings:ssh_config:source')}}
  
   - chain: 'SSHSCAN'
   - proto: 'tcp'
@@ -64,8 +64,10 @@ apply_sshd_config:
     - names:
       - '/etc/ssh/sshd_config':
         - source: salt://{{slspath}}/files/sshd_config
+
       - '/etc/rsyslog.d/30-iptables.conf':
         - contents: ':msg,contains,"[SSH Brute-Force attempt:] " /var/log/iptables.log'
+
       - '/var/log/iptables.log':
         - create: True
         - mode: 640
@@ -77,14 +79,13 @@ apply_sshd_config:
     - group: root
     - template: jinja
 
+# Make sure services are running.
 sshd_services_running:
   service.running:
     - names: 
-      - 'sshd':
-        - watch:
-          - pkg: install_sshd_pkgs
-          - file: apply_sshd_config
-      - 'rsyslog':
-        - watch:
-          - file: apply_sshd_config
+      - 'sshd'
+      - 'rsyslog'
     - enable: True
+    - watch:
+      - file: apply_sshd_config
+      - pkg: install_sshd_pkgs

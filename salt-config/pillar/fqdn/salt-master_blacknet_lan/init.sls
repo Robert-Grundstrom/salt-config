@@ -4,10 +4,10 @@ server:
 # Network configuration:
     network:
       ens3:
-        set_type: single
-        set_ipaddr: 172.18.0.50
-        set_netmask: 255.255.255.0
-        set_gateway: 172.18.0.254
+        set_type: 'single'
+        set_ipaddr: '172.18.0.50'
+        set_netmask: '255.255.255.0'
+        set_gateway: '172.18.0.254'
 
 # DNS search and servers:
     set_dns:
@@ -22,13 +22,12 @@ server:
 
 # SSHD Options:
     ssh_config:
-      - source:
-        - 172.18.0.0/24
-      - interface: ens3
+      - source: '172.18.0.0/24'
+      - interface: 'ens3'
 
 # Firewall settings:
     firewall:
-      - enable: True
+      - enable: False
       - rules:
         - 'TCP,4505,172.18.0.0/24'
         - 'TCP,4506,172.18.0.0/24'
