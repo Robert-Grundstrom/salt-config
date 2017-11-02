@@ -18,6 +18,7 @@ set_fwchains:
   iptables.chain_present:
   - names:
     - 'CUSTOM'
+    - 'SOFTWARE'
   - family: 'ipv4'
 
 # The basic settings for iptables is set here.
@@ -47,7 +48,13 @@ set_fwrules:
       - position: '3'
       - chain: 'INPUT'
       - jump: 'CUSTOM'
-      - comment: 'Jump to Salt Custom rules.'
+      - comment: 'Jump to CUSTOM rules.'
+
+    - 'Software Accept':
+      - position: '4'
+      - chain: 'INPUT'
+      - jump: 'SOFTWARE'
+      - comment: 'Jump to SOFTWARE rules.'
 
   # Common for all rules.
   - table: 'filter'
