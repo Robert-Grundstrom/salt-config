@@ -1,0 +1,36 @@
+{% set inspircd = salt['grains.filter_by']({
+    'Debian': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+    'RedHat': {
+        'packet': 'net-snmp',
+        'path': '/var/lib/net-snmp'
+    },
+    'OpenBSD': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+    'CentOS': {
+        'packet': 'net-snmp',
+        'path': '/var/lib/net-snmp'
+    },
+    'Ubuntu': {
+        'packet': 'snmpd',
+        'path': '/var/lib/snmp'
+    },
+}, merge=salt['grains.filter_by']({
+    '*': {
+        'address': salt['pillar.get']('software:inspircd:network:irc_bind_addr', '127.0.0.1'),
+        'port': salt['pillar.get']('software:inspircd:network:irc_port', '6697'),
+        'type': salt['pillar.get']('software:inspircd:network:irc_type', 'clients'),
+
+        'adm_name': salt['pillar.get']('software:inspircd:irc_admin:irc_name', 'IRC Admin'),
+        'adm_nick': salt['pillar.get']('software:inspircd:irc_admin:irc_nick', 'irc_admin'),
+        'adm_email': salt['pillar.get']('software:inspircd:irc_admin:irc_email', 'root@localhost'),
+
+        'name': salt['pillar.get']('software:inspircd:settings:irc_name', 'IRC Server'),
+        'desc': salt['pillar.get']('software:inspircd:settings:irc_description', 'IRC Server'),
+        'network':  salt['pillar.get']('software:inspircd:settings:irc_network', 'Localnet'),
+    },
+}, merge=salt['pillar.get']('inspircd:lookup')))%}

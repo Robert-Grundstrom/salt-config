@@ -1,5 +1,5 @@
-{%if salt['pillar.get']('software:inspircd')%}
-
+{% if salt['pillar.get']('software:inspircd') %}
+{% from slspath + '/map.jinja' import inspircd with context %}
 # Install pakets and check for updates.
 inspircd_pkgs:
   pkg.latest:
@@ -13,7 +13,7 @@ inspircd_fwrules:
   iptables.append:
   - names:
     - 'inspircd':
-      - dport: 6697
+      - dport: {{inspircd.port}}
       - comment: 'inspircd'
   - chain: 'SOFTWARE'
   - proto: 'tcp'
@@ -24,13 +24,14 @@ inspircd_config:
   file.managed:
     - names:
       - '/etc/inspircd/inspircd.conf':
-        - source: 'salt://{{slspath}}/files/inspircd.conf'
+        - source: 'salt://{{ slspath }}/files/inspircd.conf'
+        - slspath: '{{ slspath }}'
 
       - '/etc/inspircd/inspircd.motd':
-        - source: 'salt://{{slspath}}/files/inspircd.motd'
+        - source: 'salt://{{ slspath }}/files/inspircd.motd'
 
       - '/etc/inspircd/inspircd.rules':
-        - source: 'salt://{{slspath}}/files/inspircd.rules'
+        - source: 'salt://{{ slspath }}/files/inspircd.rules'
     - user: root
     - group: root
     - mode: 644
