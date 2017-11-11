@@ -4,11 +4,13 @@
 inspircd_pkgs:
   pkg.latest:
     - pkgs:
+#      - {{inspircd.packets}} 	# Does not work
       - 'inspircd'
       - 'libmysqlclient20'
       - 'libpq5'
       - 'libtre5'
 
+# Add firewall rules.
 inspircd_fwrules:
   iptables.append:
   - names:
@@ -20,6 +22,7 @@ inspircd_fwrules:
   - table: filter
   - save: True
 
+# Create folders and set modes.
 inspircd_dirs:
   file.directory:
     - names:
@@ -30,9 +33,7 @@ inspircd_dirs:
     - group: irc
     - mode: 770
 
-# openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 1095  
-# openssl dhparam -out dhparam.pem 4096
-
+# Push inspircd configuration.
 inspircd_config:
   file.managed:
     - names:
@@ -67,6 +68,7 @@ inspircd_config:
     - mode: 644
     - template: jinja
 
+# Start the inspircd service.
 inspircd_serice:
   service.running:
     - names:
