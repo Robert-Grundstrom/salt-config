@@ -2,22 +2,25 @@ This will install and configure inspircd according to the pillar data.
 By default this configuration enables SSL by default for security purposes.
 
 A BASH script will be created '/etc/inspircd/sslkeys/create-cert.sh' this is to create / renew 
-ssl certificates when requiered. Salt will not renew the certificate automatically if its expiered.
+ssl certificates when requiered.
+Salt will not renew the certificate automatically if its expiered.
 The certificate is valid for 1095 days (3 Years) from its creation date.
 
 It is recommended to use a SSL certificate check in your monitor solution to keep track of 
 when its time to renew your certificate.
 
--------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 
-InspIRCd is a modular Internet Relay Chat (IRC) server written in C++ for Linux, BSD, Windows and Mac OS X systems.
+InspIRCd is a modular Internet Relay Chat (IRC) server written in
+C++ for Linux, BSD, Windows and Mac OS X systems.
 
 It was created from scratch to be stable, modern and lightweight.
-It avoids a number of design flaws and performance issues that plague other more established projects,
-such as UnrealIRCd, while providing the same level of feature parity.
+It avoids a number of design flaws and performance issues that plague other more established
+projects, such as UnrealIRCd, while providing the same level of feature parity.
 
-It provides a tunable number of features through the use of an advanced but well documented module system.
-By keeping core functionality to a minimum we hope to increase the stability,
-security and speed of InspIRCd while also making it customisable to the needs of many different users.
+It provides a tunable number of features through the use of an advanced but well documented
+module system. By keeping core functionality to a minimum we hope to increase the stability,
+security and speed of InspIRCd while also making it customisable to the needs of many
+different users.
 
  - source: http://www.inspircd.org/
