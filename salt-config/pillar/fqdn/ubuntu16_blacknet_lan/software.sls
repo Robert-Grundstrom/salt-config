@@ -15,4 +15,12 @@ software:
     irc_admin:
       irc_name:'IRC Administrator':
       irc_nick: 'ircadmin'
-      irc_email: 'root@localhost' 
+      irc_email: 'root@localhost'
+
+    ssl:
+      country: 'SE'
+      state: 'Bohuslan'
+      city: 'Gothenburg'
+      organisation: 'Private'
+      unit: 'IT'
+      

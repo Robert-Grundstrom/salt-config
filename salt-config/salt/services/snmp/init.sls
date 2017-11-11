@@ -44,8 +44,7 @@ set_SNMP_fwrule_{{snmp.monitor_ip}}:
   {%for monitor in snmp.monitor_ip%}
   - source: {{monitor}}/32
   {%endfor%}
-  - chain: 'INPUT'
-  - jump: 'ACCEPT'
+  - chain: 'SOFTWARE'
   - save: True
 
 # Make sure SNMP service are running.

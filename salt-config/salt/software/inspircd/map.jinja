@@ -32,5 +32,12 @@
         'name': salt['pillar.get']('software:inspircd:settings:irc_name', 'IRC Server'),
         'desc': salt['pillar.get']('software:inspircd:settings:irc_description', 'IRC Server'),
         'network':  salt['pillar.get']('software:inspircd:settings:irc_network', 'Localnet'),
-    },
+
+        'ssl_country': salt['pillar.get']('software:inspircd:ssl:country'),
+        'ssl_state': salt['pillar.get']('software:inspircd:ssl:state'),
+        'ssl_city': salt['pillar.get']('software:inspircd:ssl:city'),
+        'ssl_organisation': salt['pillar.get']('software:inspircd:ssl:organisation'),
+        'ssl_unit': salt['pillar.get']('software:inspircd:ssl:unit'),
+        'ssl_hostname': salt['grains.get']('fqdn'),
+    },  
 }, merge=salt['pillar.get']('inspircd:lookup')))%}
