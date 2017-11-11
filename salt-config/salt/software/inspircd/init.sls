@@ -68,6 +68,15 @@ inspircd_config:
     - mode: 644
     - template: jinja
 
+# If one ore more of the SSL certificate files are missing.
+inspircd_ssl:
+  cmd.run:
+  - name: '/etc/inspircd/sslkeys/create-cert.sh --force'
+  - unless:
+    - test -f '/etc/inspircd/sslkeys/cert.pem'
+    - test -f '/etc/inspircd/sslkeys/key.pem'
+    - test -f '/etc/inspircd/sslkeys/dhparam.pem'
+
 # Start the inspircd service.
 inspircd_serice:
   service.running:
