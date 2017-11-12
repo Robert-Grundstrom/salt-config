@@ -1,3 +1,3 @@
 include:
   - {{slspath}}.config
-  - {{slspath}}.software
+  - {{slspath}}.inspircd

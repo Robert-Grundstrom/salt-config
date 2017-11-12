@@ -1,0 +1,48 @@
+software:
+  inspircd:
+
+# Network configuration.
+    network:
+      irc_bind_addr: '127.0.0.1'
+      irc_port: '6667'
+      irc_type: 'clients'
+      irc_dns: '127.0.0.1'
+
+# IRC name, description, network.
+    settings:
+      irc_name: 'irc.local'
+      irc_description: 'Local IRC Server'
+      irc_network: 'Local IRC Server'
+
+# Administrator user.
+    admin:
+      irc_name: 'IRC Administrator'
+      irc_nick: 'ircadmin'
+      irc_email: 'root@localhost'
+
+# There are no default settings for the SSL configuration.
+# The SSL options are requiered.
+    ssl:
+      country: 'US'
+      state: 'Texas'
+      city: 'Dallas'
+      organisation: 'Private'
+      unit: 'IT'
+
+# Operators, the users that are specified here kan use the /OPER
+# command to gain global OP on the IRC server.
+    operators:
+      user1:
+        password: 'user1_passwd'
+        host: '*@localhost'
+        type: 'NetAdmin'
+
+      user2:
+        password: 'user2_passwd'
+        host: '*@192.168.0.10'
+        type: 'GlobalOp'
+
+      user3:
+        password: 'user3_passwd'
+        host: '*@workstation.domain.com'
+        type: 'Helper'
