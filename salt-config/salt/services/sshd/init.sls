@@ -38,16 +38,20 @@ set_sshd_fwrules:
 
     - 'SSHD Log':
       - position: '2'
-      - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
+      - match: 'recent --update --name SSH --rsource'
       - jump: 'LOG'
       - log-prefix: '[SSH Brute-Force attempt:] '
       - log-level: '7'
+      - seconds: '120'
+      - hitcount: '10'
 
     - 'SSHD Drop':
       - position: '3'
       - jump: 'REJECT'
-      - match: 'recent --update --seconds 120 --hitcount 10 --name SSH --rsource'
+      - match: 'recent --update --name SSH --rsource'
       - connstate: 'NEW'
+      - seconds: '120'
+      - hitcount: '10'
 
     - 'SSHD Accept':
       - position: '4'

@@ -17,7 +17,6 @@ fwpkg_dep:
 set_fwchains:
   iptables.chain_present:
   - names:
-    - 'CUSTOM'
     - 'SOFTWARE'
   - family: 'ipv4'
 
@@ -41,18 +40,8 @@ set_fwrules:
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
 
-  # Adding jump to the CUSTOM chain.
-  # Here you can find the rules that are defined in
-  # the pillar data
-    - 'Custom Accept':
-      - position: '3'
-      - chain: 'INPUT'
-      - jump: 'CUSTOM'
-      - comment: 'Jump to CUSTOM rules.'
-
     - 'Software Accept':
-      - position: '4'
-      - chain: 'INPUT'
+      - position: '3'
       - jump: 'SOFTWARE'
       - comment: 'Jump to SOFTWARE rules.'
 
@@ -64,6 +53,12 @@ set_fwrules:
 
 # Setting the custom rules of the server defined by pillar.
 {%-if firewall is defined%}
+set_custom_chain:
+  iptables.chain_present:
+  - names:
+    - 'CUSTOM'
+  - family: 'ipv4'
+
   {%-for fw_value in firewall%}
     {%-set proto, dport, source = fw_value.split(',')%}
 
