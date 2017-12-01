@@ -1,0 +1,75 @@
+#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#
+# LDAP authentication module: Adds the ability to authenticate users  #
+# via LDAP. This is an extra module which must be enabled explicitly  #
+# by symlinking it from modules/extra, and requires the OpenLDAP libs #
+# This module is in extras. To enable it, Re-run configure with:      #
+# ./configure --enable-extras=m_ldapauth.cpp                          #
+# and run make install, then uncomment this module.                   #
+#<module name="m_ldapauth.so">
+#                                                                     #
+# Configuration:                                                      #
+#                                                                     #
+# <ldapauth baserdn="ou=People,dc=brainbox,dc=cc"                     #
+#           attribute="uid"                                           #
+#           server="ldap://brainwave.brainbox.cc"                     #
+#           allowpattern="Guest*"                                     #
+#           killreason="Access denied"                                #
+#           searchscope="subtree"                                     #
+#           binddn="cn=Manager,dc=brainbox,dc=cc"                     #
+#           bindauth="mysecretpass"                                   #
+#           verbose="yes"                                             #
+#           host="$uid.$ou.inspircd.org"                              #
+#           useusername="no">                                         #
+#                                                                     #
+# <ldapwhitelist cidr="10.42.0.0/16">                                 #
+#                                                                     #
+# <ldaprequire attribute="attr" value="val">                          #
+#                                                                     #
+# The baserdn indicates the base DN to search in for users. Usually   #
+# this is 'ou=People,dc=yourdomain,dc=yourtld'.                       #
+#                                                                     #
+# The attribute value indicates the attribute which is used to locate #
+# a user account by name. On POSIX systems this is usually 'uid'.     #
+#                                                                     #
+# The useusername setting chooses whether the user's username or      #
+# nickname is used when locating a user account, if a username isn't  #
+# provided in PASS.                                                   #
+#                                                                     #
+# The server parameter indicates the LDAP server to connect to. The   #
+# ldap:// style scheme before the hostname proper is MANDATORY.       #
+#                                                                     #
+# The allowpattern value allows you to specify a wildcard mask which  #
+# will always be allowed to connect regardless of if they have an     #
+# account, for example guest users.                                   #
+#                                                                     #
+# Killreason indicates the QUIT reason to give to users if they fail  #
+# to authenticate.                                                    #
+#                                                                     #
+# The searchscope value indicates the subtree to search under. On our #
+# test system this is 'subtree'. Your mileage may vary.               #
+#                                                                     #
+# Setting the verbose value causes an oper notice to be sent out for  #
+# every failed authentication to the server, with an error string.    #
+#                                                                     #
+# The binddn and bindauth indicate the DN to bind to for searching,   #
+# and the password for the distinguished name. Some LDAP servers will #
+# allow anonymous searching in which case these two values do not     #
+# need defining, otherwise they should be set similar to the examples #
+# above.                                                              #
+#                                                                     #
+# ldapwhitelist indicates that clients connecting from an IP in the   #
+# provided CIDR do not need to authenticate against LDAP. It can be   #
+# repeated to whitelist multiple CIDRs.                               #
+#                                                                     #
+# ldaprequire allows further filtering on the LDAP user, by requiring #
+# certain LDAP attibutes to have a given value. It can be repeated,   #
+# in which case the list will act as an OR list, that is, the         #
+# authentication will succeed if any of the requirements in the list  #
+# is satisfied.                                                       #
+#                                                                     #
+# host allows you to change the displayed host of users connecting    #
+# from ldap. The string supplied takes formatters which are replaced  #
+# from the DN. For instance, if your DN looks like:                   #
+# uid=w00t,ou=people,dc=inspircd,dc=org, then the formatters uid, ou  #
+# and dc will be available to you. If a key is given multiple times   #
+# in the DN, the last appearance will take precedence. 

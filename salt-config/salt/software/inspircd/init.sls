@@ -34,26 +34,10 @@ inspircd_dirs:
     - group: irc
     - mode: 770
 
-# If one ore more of the SSL certificate files are missing.
-inspircd_ssl:
-  cmd.run:
-  - name: '/etc/inspircd/sslkeys/create-cert.sh --force'
-  - unless:
-    - test -f '/etc/inspircd/sslkeys/cert.pem'
-    - test -f '/etc/inspircd/sslkeys/key.pem'
-    - test -f '/etc/inspircd/sslkeys/dhparam.pem'
-
 # Push inspircd configuration.
 inspircd_config:
   file.managed:
     - names:
-      - '/etc/inspircd/sslkeys/cert.pem':
-        - replace: False
-      - '/etc/inspircd/sslkeys/key.pem':
-        - replace: False
-      - '/etc/inspircd/sslkeys/dhparam.pem':
-        - replace: False
-
       - '/etc/inspircd/sslkeys/create-cert.sh':
         - source: 'salt://{{ slspath }}/files/create-cert.sh'
         - mode: 755
@@ -77,6 +61,16 @@ inspircd_config:
     - group: irc
     - mode: 644
     - template: jinja
+
+# If one ore more of the SSL certificate files are missing.
+# inspircd_ssl:
+  cmd.run:
+  - name: '/etc/inspircd/sslkeys/create-cert.sh --force'
+  - unless:
+    - test -f '/etc/inspircd/sslkeys/cert.pem'
+    - test -f '/etc/inspircd/sslkeys/key.pem'
+    - test -f '/etc/inspircd/sslkeys/dhparam.pem'
+                 
 
 # Start the inspircd service.
 inspircd_serice:

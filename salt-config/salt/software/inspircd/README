@@ -9,6 +9,9 @@ The certificate is valid for 1095 days (3 Years) from its creation date.
 It is recommended to use a SSL certificate check in your monitor solution to keep track of 
 when its time to renew your certificate.
 
+NOTE: Running this for the first time takes a LONG time. Building the SSL certificates takes
+a relly long time.
+
 --------------------------------------------------------------------------------------------------
 
 InspIRCd is a modular Internet Relay Chat (IRC) server written in
