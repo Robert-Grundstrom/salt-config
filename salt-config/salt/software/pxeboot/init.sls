@@ -1,3 +1,3 @@
 include:
-  - {{slspath}}.inspircd
   - {{slspath}}.pxeboot
+  - {{slspath}}.pxenfs

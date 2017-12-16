@@ -3,7 +3,7 @@ software:
 
 # Network configuration.
     network:
-      irc_bind_addr: '172.18.0.52'
+      irc_bind_addr: '172.18.0.51'
       irc_port: '6667'
       irc_type: 'clients'
       irc_dns: '172.18.0.254'

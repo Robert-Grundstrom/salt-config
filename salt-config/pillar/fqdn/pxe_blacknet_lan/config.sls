@@ -5,7 +5,7 @@ server:
     network:
       ens3:
         set_type: 'single'
-        set_ipaddr: '172.18.0.52'
+        set_ipaddr: '172.18.0.53'
         set_netmask: '255.255.255.0'
         set_gateway: '172.18.0.254'
 
@@ -37,7 +37,7 @@ server:
       - snmp_usr: rouser
       - snmp_sha: monkeylikebanana
       - snmp_aes: monkeyhasbanana
-      - snmp_ip: 172.18.0.52
+      - snmp_ip: 172.18.0.53
 
         # The default packets to be installed.
         # Salt will keep them at latest version.

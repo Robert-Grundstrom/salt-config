@@ -1,0 +1,5 @@
+# Home folders and ISO storage.
+/opt/nfs-share	172.18.0.0/24(rw,fsid=0,insecure,no_subtree_check,async)
+
+# OS files for PXE boot.
+/opt/os		127.0.0.1/24(rw,fsid=0,insecure,no_subtree_check,async)

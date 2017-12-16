@@ -1,0 +1,8 @@
+# ###################################################### #
+# This file is managed by Salt. Any changes here will    #
+# be overwritten.                                        #
+# ###################################################### #
+TFTP_USERNAME="tftp"
+TFTP_ADDRESS="172.18.0.53:69"
+TFTP_OPTIONS="-l -s /opt/tftpboot"
+RUN_DAEMON="yes"
