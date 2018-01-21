@@ -40,8 +40,13 @@ set_fwrules:
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
 
-    - 'Software Accept':
+    - 'Pillar Accept':
       - position: '3'
+      - jump: 'PILLAR'
+      - comment: 'Jump to PILLAR rules.'
+
+    - 'Software Accept':
+      - position: '4'
       - jump: 'SOFTWARE'
       - comment: 'Jump to SOFTWARE rules.'
 
@@ -56,7 +61,7 @@ set_fwrules:
 set_custom_chain:
   iptables.chain_present:
   - names:
-    - 'CUSTOM'
+    - 'PILLAR'
   - family: 'ipv4'
 
   {%-for fw_value in firewall%}
@@ -64,7 +69,7 @@ set_custom_chain:
 
 {{proto+'/'+dport+'/src:'+source}}:
   iptables.append:
-  - chain: 'CUSTOM'
+  - chain: 'PILLAR'
   - proto: {{proto}}
   - dport: {{dport}}
   - source: {{source}}
