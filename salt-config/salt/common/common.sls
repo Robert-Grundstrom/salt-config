@@ -1,4 +1,4 @@
-{% from slspath + '/map.jinja' import os with context %}
+{ from slspath + '/map.jinja' import os with context %}
 # This is the common configuration file.
 # It handels network settings and general packet installation.
 ---
@@ -26,6 +26,9 @@ apply_configuration:
       {%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
       - '{{os.network_path}}':
         - source: 'salt://{{slspath}}/files/network.cfg'
+      - '/etc/apt'
+        - recurse
+        - source: 'salt://{{slspath}}/files/apt'
       {%endif%}
 
       {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
