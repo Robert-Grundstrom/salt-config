@@ -1,19 +1,11 @@
-###### Ubuntu Main Repos
-deb http://storage.blacknet.lan/ubuntu/ xenial main restricted
-deb-src http://storage.blacknet.lan/ubuntu/ xenial main restricted
+##### 16.04 mirroring #####
+deb http://storage.blacknet.lan/ubuntu/ xenial main main/debian-installer restricted restricted/debian-installer universe multiverse
+deb http://storage.blacknet.lan/ubuntu/ xenial-security main restricted universe multiverse
+deb http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted universe multiverse
+deb http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted universe multiverse
+deb http://storage.blacknet.lan/ubuntu/ xenial-backports main restricted universe multiverse
 
-###### Ubuntu Update Repos
-deb http://storage.blacknet.lan/ubuntu/ xenial-security main restricted
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-security main restricted
-
-deb http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted
-
-deb http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted
-
-deb http://storage.blacknet.lan/ubuntu xenial-backports main restricted universe multiverse
-deb-src http://storage.blacknet.lan/ubuntu xenial-backports main restricted universe multiverse
-
-##### Salt stack #####
-deb http://storage.blacknet.lan/salt xenial main
+deb-src http://storage.blacknet.lan/ubuntu/ xenial-security main restricted universe multiverse
+deb-src http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted universe multiverse
+deb-src http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted universe multiverse
+deb-src http://storage.blacknet.lan/ubuntu/ xenial-backports main restricted universe multiverse

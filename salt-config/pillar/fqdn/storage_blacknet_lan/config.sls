@@ -29,8 +29,10 @@ server:
     firewall:
       - enable: False
       - rules:
-          - 'TCP,21,172.18.0.0/24'
-          - 'TCP,9987,172.18.0.0/24'
+          - 'TCP,21,172.18.0.254/32'
+          - 'TCP,21,172.18.0.10/32'
+          - 'TCP,9987,0.0.0.0/0'
+          - 'TCP,80,172.18.0.0/24'
 
         # SNMP settings:
     set_snmp:

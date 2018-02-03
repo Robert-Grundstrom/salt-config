@@ -18,6 +18,7 @@ set_fwchains:
   iptables.chain_present:
   - names:
     - 'SOFTWARE'
+    - 'PILLAR' 
   - family: 'ipv4'
 
 # The basic settings for iptables is set here.
@@ -58,12 +59,6 @@ set_fwrules:
 
 # Setting the custom rules of the server defined by pillar.
 {%-if firewall is defined%}
-set_custom_chain:
-  iptables.chain_present:
-  - names:
-    - 'PILLAR'
-  - family: 'ipv4'
-
   {%-for fw_value in firewall%}
     {%-set proto, dport, source = fw_value.split(',')%}
 
@@ -84,6 +79,7 @@ set_fwpolicys:
   - chain: 'INPUT'
   - table: filter
   - family: ipv4
+  - save: True
 {%-if fw_enable == True%}
   - policy: DROP
 {%-else%}

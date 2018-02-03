@@ -1,4 +1,4 @@
-{% set os = salt['grains.filter_by']({
+{% set osystem = salt['grains.filter_by']({
     'Debian': {
         'network': 'networking',
         'network_path': '/etc/network/interfaces',
@@ -41,5 +41,5 @@
         'repo_url': 'deb http://repo.saltstack.com/apt/ubuntu/'+salt['grains.get']('osrelease')+
 '/amd64/latest '+salt['grains.get']('osrelease')+' main',
     },
-}, merge=salt['pillar.get']('os:lookup'))%}
+}, merge=salt['pillar.get']('osystem:lookup'))%}
 

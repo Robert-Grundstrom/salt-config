@@ -1,4 +1,4 @@
-{ from slspath + '/map.jinja' import os with context %}
+{% from slspath + '/map.jinja' import osystem with context %}
 # This is the common configuration file.
 # It handels network settings and general packet installation.
 ---
@@ -7,7 +7,7 @@ disabled_services:
   service.dead:
     - names:
         - 'timesyncd'
-        - '{{os.network_manager}}'
+        - '{{osystem.network_manager}}'
     - enable: False
 
 # Installs packets that is defined in pillar.
@@ -23,24 +23,8 @@ disabled_services:
 apply_configuration:
   file.managed:
     - names:
-      {%if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
-      - '{{os.network_path}}':
+      - '{{osystem.network_path}}':
         - source: 'salt://{{slspath}}/files/network.cfg'
-      - '/etc/apt'
-        - recurse
-        - source: 'salt://{{slspath}}/files/apt'
-      {%endif%}
-
-      {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
-        {%-for device, value in salt.pillar.get('server:settings:network', {}).iteritems()%}
-      - '{{os.network_path}}{{device}}':
-        - source: 'salt://{{slspath}}/files/network.cfg'
-        - device: {{device}}
-        - ipaddr: {{value['set_ipaddr']}}
-        - netmask: {{value['set_netmask']}}
-        - gateway: {{value['set_gateway']}}
-        {%endfor%}
-      {%endif%}
 
       - '/etc/resolv.conf':
         - source: 'salt://{{slspath}}/files/resolv.conf'
@@ -57,6 +41,13 @@ apply_configuration:
     - group: root
     - follow_symlinks: False
 
+# configure logsources
+conf_logsources:
+  file.recurse:
+    - name: '/etc/apt'
+    - source: 'salt://{{slspath}}/files/apt'
+    - user: root
+    - group: root
 # Ensure services are running. Salt-minion is ensured running and enable.
 # Reason for salt-minion to be here is mostly to ensure salt-minion is 
 # running after a reboot.
@@ -64,7 +55,7 @@ services_running:
   service.running:
     - names:
       - 'salt-minion'
-      - '{{os.network}}':
+      - '{{osystem.network}}':
         - watch:
           - file: 'apply_configuration'
     - enable: True
