@@ -7,8 +7,8 @@ ntp_install:
 apply_ntp_configuration:
   file.managed:
     - names:
-      - '/etc/ntp.conf':
-        - source: salt://{{slspath}}/files/ntp.conf
+      - '/etc/{{ ntp.file }}':
+        - source: salt://{{ slspath }}/files/ntp.conf
     - mode: 644
     - follow_symlinks: False
     - template: jinja

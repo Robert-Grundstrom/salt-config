@@ -9,12 +9,13 @@
     - present
   user.present:
     - fullname: {{salt['pillar.get']('server:set_users:'+user+':set_fullname')}} 
-    - shell: /bin/bash
+    - shell: /usr/local/bin/bash
     - home: /home/{{user}}
     - password: {{salt['pillar.get']('server:set_users:'+user+':set_passwd')}}
     - enforce_password: True
     - groups:
       - {{user}}
+      - wheel
 
   ssh_auth.present:
     - comment: 'Adding keys'
@@ -25,16 +26,32 @@
   {% endif %}
 {% endfor %}
 
+# Ensure wheel and root group is present.
+core_groups:
+  group.present:
+  - names:
+    - 'root'
+    - 'wheel'
+
 # Applies sudoers to salt-master.
+sudoers_dir:
+  file.directory:
+  - mode: 755
+  - name: /etc/sudoers.d
+  - user: root
+  - group: wheel
+
 sudoers_saltmaster:
   file.managed:
     - names:
       - '/etc/sudoers.d/administrators':
         - source: salt://{{slspath}}/files/administrators
-    - mode: 0400
+    - makedirs: True
+    - dirmode: 755
+    - mode: 0440
     - template: jinja
     - user: root
-    - group: root
+    - group: wheel
     - follow_symlinks: False
 
 # Delete users if pillar is defined.

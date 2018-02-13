@@ -1,0 +1,28 @@
+{% set ntp = salt['grains.filter_by']({
+    'Debian': {
+        'packet': 'ntp',
+        'service': 'ntp',
+        'file': 'ntp.conf',
+    },
+    'RedHat': {
+        'packet': 'ntp',
+        'service': 'ntpd',
+        'file': 'ntp.conf',
+    },
+    'CentOS': {
+        'packet': 'ntp',
+        'service': 'ntpd',
+        'file': 'ntp.conf',
+    },
+    'Ubuntu': {
+        'packet': 'ntp',
+        'service': 'ntp',
+        'file': 'ntp.conf',
+    },
+    'OpenBSD': {
+        'packet': 'ntp',
+        'service': 'ntpd',
+        'file': 'ntpd.conf',
+    },
+
+}, merge=salt['pillar.get']('ntp:lookup'))%}

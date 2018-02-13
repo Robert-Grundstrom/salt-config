@@ -1,3 +1,3 @@
 include:
-  - {{slspath}}.pxeboot
-  - {{slspath}}.pxenfs
+  - {{slspath}}.pxe-boot
+  - {{slspath}}.nfs-server
