@@ -9,7 +9,7 @@
     - present
   user.present:
     - fullname: {{salt['pillar.get']('server:set_users:'+user+':set_fullname')}} 
-    - shell: /usr/local/bin/bash
+    - shell: /bin/bash
     - home: /home/{{user}}
     - password: {{salt['pillar.get']('server:set_users:'+user+':set_passwd')}}
     - enforce_password: True
