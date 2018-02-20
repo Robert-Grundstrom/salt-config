@@ -5,6 +5,7 @@ install_dependecys:
   - pkgs:
     - 'policycoreutils'
     - 'policycoreutils-python'
+
 set_selinux_mode:
   selinux.mode:
   - name: Permissive

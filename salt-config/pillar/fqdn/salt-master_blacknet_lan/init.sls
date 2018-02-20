@@ -3,7 +3,7 @@ server:
 
 # Network configuration:
     network:
-      ens3:
+      ens160:
         set_type: 'single'
         set_ipaddr: '172.18.0.50'
         set_netmask: '255.255.255.0'
@@ -23,7 +23,7 @@ server:
 # SSHD Options:
     ssh_config:
       - source: '172.18.0.0/24'
-      - interface: 'ens3'
+      - interface: 'ens160'
 
 # Firewall settings:
     firewall:

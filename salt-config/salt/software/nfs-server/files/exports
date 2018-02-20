@@ -1,0 +1,6 @@
+# Home folders and ISO storage.
+/opt/nfs-share/home	172.18.0.0/24(rw,root_squash)
+/opt/nfs-share/ISO     172.18.0.0/24(rw,root_squash)
+
+# OS files for PXE boot.
+/opt/os		127.0.0.1/32(rw,root_squash)

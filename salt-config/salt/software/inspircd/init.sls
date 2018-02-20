@@ -1,4 +1,3 @@
-{% if salt['pillar.get']('software:inspircd') %}
 {% from slspath + '/map.jinja' import inspircd with context %}
 # Install pakets and check for updates.
 inspircd_pkgs:
@@ -81,4 +80,3 @@ inspircd_serice:
     - watch:
       - pkg: inspircd_pkgs
       - file: inspircd_config
-{%endif%}

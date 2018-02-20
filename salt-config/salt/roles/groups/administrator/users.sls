@@ -15,7 +15,9 @@
     - enforce_password: True
     - groups:
       - {{user}}
+{%-if salt['grains.get']('os') in ['OpenBSD']%}
       - wheel
+{%-endif%}
 
   ssh_auth.present:
     - comment: 'Adding keys'
@@ -27,19 +29,24 @@
 {% endfor %}
 
 # Ensure wheel and root group is present.
+{%-if salt['grains.get']('os') in ['OpenBSD']%}
 core_groups:
   group.present:
   - names:
     - 'root'
     - 'wheel'
-
+{%-endif%}
 # Applies sudoers to salt-master.
 sudoers_dir:
   file.directory:
   - mode: 755
   - name: /etc/sudoers.d
   - user: root
+{%-if salt['grains.get']('os') in ['OpenBSD']%}
   - group: wheel
+{%-else%}
+  - group: root
+{%-endif%}
 
 sudoers_saltmaster:
   file.managed:
@@ -51,8 +58,12 @@ sudoers_saltmaster:
     - mode: 0440
     - template: jinja
     - user: root
-    - group: wheel
     - follow_symlinks: False
+  {%-if salt['grains.get']('os') in ['OpenBSD']%}
+    - group: wheel
+  {%-else%}
+    - group: root      
+  {%-endif%}
 
 # Delete users if pillar is defined.
 {%- if salt['pillar.get']('remove_user') %}

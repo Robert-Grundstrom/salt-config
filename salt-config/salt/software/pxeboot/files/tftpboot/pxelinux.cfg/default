@@ -16,8 +16,8 @@ menu timeoutrow 17
 menu tabmsg Press ENTER to boot or TAB to edit a menu entry
 
 LABEL Ubuntu 17 Desktop x64
-KERNEL vmlinuz-2.6.15-23-686
-APPEND root=/dev/nfs initrd=initrd.img-2.6.15-23-686 nfsroot=192.168.2.2:/nfsroot ip=dhcp rw
+kernel ubuntu/linux 
+append ks=http://storage.blacknet.lan/ks/ks.cfg vga=normal initrd=ubuntu/initrd.gz
 
 include menu/utils.cfg
 default menu/vesamenu.c32
