@@ -10,6 +10,20 @@ disabled_services:
         - '{{osystem.network_manager}}'
     - enable: False
 
+# configure logsources
+conf_logsources:
+  file.recurse:
+    - name: '/etc/apt'
+    - source: 'salt://{{slspath}}/files/apt'
+    - user: root
+    - group: root
+
+apt_update:
+  cmd.run:
+    - name: 'apt update'
+    - onchanges:
+      - conf_logsources
+
 # Installs packets that is defined in pillar.
 {%-for packet in salt['pillar.get']('server:settings:set_default_packets',)%}
 {{packet}}:
@@ -41,13 +55,6 @@ apply_configuration:
     - group: root
     - follow_symlinks: False
 
-# configure logsources
-conf_logsources:
-  file.recurse:
-    - name: '/etc/apt'
-    - source: 'salt://{{slspath}}/files/apt'
-    - user: root
-    - group: root
 # Ensure services are running. Salt-minion is ensured running and enable.
 # Reason for salt-minion to be here is mostly to ensure salt-minion is 
 # running after a reboot.

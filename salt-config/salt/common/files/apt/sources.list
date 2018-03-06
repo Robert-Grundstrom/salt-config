@@ -4,8 +4,3 @@ deb http://storage.blacknet.lan/ubuntu/ xenial-security main restricted universe
 deb http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted universe multiverse
 deb http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted universe multiverse
 deb http://storage.blacknet.lan/ubuntu/ xenial-backports main restricted universe multiverse
-
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-security main restricted universe multiverse
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-updates main restricted universe multiverse
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-proposed main restricted universe multiverse
-deb-src http://storage.blacknet.lan/ubuntu/ xenial-backports main restricted universe multiverse

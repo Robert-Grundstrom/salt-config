@@ -4,6 +4,15 @@ ntp_install:
     - pkgs:
       - {{ntp.packet}}
 
+# If OS is Ubuntu or Debian disable systemd-timesyncd.
+{%-if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
+disable_timesyncd:
+  service.dead:
+    - names:
+      - 'systemd-timesyncd'
+    - enable: False
+{%-endif%}
+
 apply_ntp_configuration:
   file.managed:
     - names:

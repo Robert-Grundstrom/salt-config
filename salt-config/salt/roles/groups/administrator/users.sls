@@ -19,11 +19,11 @@
       - wheel
 {%-endif%}
 
-  ssh_auth.present:
-    - comment: 'Adding keys'
-    - user: {{user}}
-    - source: 'salt://.ssh-keys/{{user}}.auth'
-    - config: '%h/.ssh/authorized_keys'
+#  ssh_auth.present:
+#    - comment: 'Adding keys'
+#    - user: {{user}}
+#    - source: 'salt://.ssh-keys/{{user}}.auth'
+#    - config: '%h/.ssh/authorized_keys'
 
   {% endif %}
 {% endfor %}
