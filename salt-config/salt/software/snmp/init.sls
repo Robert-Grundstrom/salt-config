@@ -22,7 +22,7 @@ snmp_config:
 
       - '/etc/snmp/snmpd.conf':
         - source: salt://{{slspath}}/files/snmpd.conf
-        - snmp_ip: {{snmp.snmp_ip}}
+        - snmp_ip: {{snmp.bind}}
         - usr: {{snmp.user}}
     - template: jinja
     - mode: 644
@@ -40,7 +40,7 @@ set_SNMP_fwrule_{{snmp.monitor_ip}}:
   iptables.append:
   - dport: '161'
   - proto: 'udp'
-  - d: {{snmp.snmp_ip}}/32
+  - d: {{snmp.bind}}/32
   {%for monitor in snmp.monitor_ip%}
   - source: {{monitor}}/32
   {%endfor%}

@@ -1,5 +1,5 @@
-{%set fw_enable = salt['pillar.get']('server:settings:firewall:enable', False)%}
-{%set firewall = salt['pillar.get']('server:settings:firewall:rules', {})%}
+{%set fw_enable = salt['pillar.get']('software:firewall:enable', False)%}
+{%set firewall = salt['pillar.get']('software:firewall:rules', {})%}
 # iptables is used as a firewall for clients.
 # This is for ipv4 only!
 # 

@@ -21,10 +21,10 @@
     },
 }, merge=salt['grains.filter_by']({
     '*': {
-        'user': salt['pillar.get']('server:settings:set_snmp:snmp_usr', 'rouser'),
-        'sha': salt['pillar.get']('server:settings:set_snmp:snmp_sha', 'monkeylikebanana'), 
-        'aes': salt['pillar.get']('server:settings:set_snmp:snmp_aes', 'monkeyhasbanana'),
-        'snmp_ip': salt['pillar.get']('server:settings:set_snmp:snmp_ip', '0.0.0.0'),
-        'monitor_ip': salt['pillar.get']('monitor:servers', {}),
+        'user': salt['pillar.get']('software:snmp:user', 'rouser'),
+        'sha': salt['pillar.get']('software:snmp:sha', 'monkeylikebanana'), 
+        'aes': salt['pillar.get']('software:snmp:aes', 'monkeyhasbanana'),
+        'bind': salt['pillar.get']('software:snmp:bind', '0.0.0.0'),
+        'monitor_ip': salt['pillar.get']('software:monitor:servers', {}),
     },
 }, merge=salt['pillar.get']('snmp:lookup')))%}

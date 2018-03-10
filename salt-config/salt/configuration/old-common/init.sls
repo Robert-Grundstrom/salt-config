@@ -6,26 +6,11 @@
 disabled_services:
   service.dead:
     - names:
-        - 'timesyncd'
         - '{{osystem.network_manager}}'
     - enable: False
 
-# configure logsources
-conf_logsources:
-  file.recurse:
-    - name: '/etc/apt'
-    - source: 'salt://{{slspath}}/files/apt'
-    - user: root
-    - group: root
-
-apt_update:
-  cmd.run:
-    - name: 'apt update'
-    - onchanges:
-      - conf_logsources
-
 # Installs packets that is defined in pillar.
-{%-for packet in salt['pillar.get']('server:settings:set_default_packets',)%}
+{%-for packet in salt['pillar.get']('software:default_pkgs',)%}
 {{packet}}:
   pkg.latest
 {%- endfor %}
@@ -42,8 +27,8 @@ apply_configuration:
 
       - '/etc/resolv.conf':
         - source: 'salt://{{slspath}}/files/resolv.conf'
-        - search: {{ salt['pillar.get']('server:settings:set_dns:set_search') }}
-        - nameservers: {{salt['pillar.get']('server:settings:set_dns:set_server')}}
+        - search: {{ salt['pillar.get']('software:dns:set_search') }}
+        - nameservers: {{salt['pillar.get']('software:dns:set_server')}}
 
       - '/sbin/call_home':
         - contents: 'salt-call --state_output=mixed state.apply'

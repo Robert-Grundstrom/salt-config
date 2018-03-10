@@ -56,7 +56,7 @@ set_sshd_fwrules:
     - 'SSHD Accept':
       - position: '4'
       - jump: 'ACCEPT'
-      - source: {{salt['pillar.get']('server:settings:ssh_config:source')}}
+      - source: {{salt['pillar.get']('software:ssh:source')}}
  
   - chain: 'SSHSCAN'
   - proto: 'tcp'

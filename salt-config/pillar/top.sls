@@ -1,6 +1,7 @@
 base:
   '*':
     - users
+    - repositorys 
 
   'fqdn:{{salt['grains.get']('fqdn')}}':
     - match: grain
