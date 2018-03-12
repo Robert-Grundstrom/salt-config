@@ -1,3 +1,3 @@
 pkg_vim:
-  pkg.latest
+  pkg.latest:
     - name: 'vim'

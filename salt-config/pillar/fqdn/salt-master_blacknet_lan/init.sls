@@ -16,8 +16,9 @@ software:
 
 # NTP servers:
   ntp:
-    - ntp1.sth.netnod.se
-    - ntp2.sth.netnod.se
+    servers:
+      - ntp1.sth.netnod.se
+      - ntp2.sth.netnod.se
 
 # SSHD Options:
   ssh:

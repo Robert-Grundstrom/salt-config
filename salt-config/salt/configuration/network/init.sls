@@ -20,10 +20,8 @@ network_conf:
 {%- if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
       - '{{ network.path }}':
         - source: 'salt://{{slspath}}/files/network.cfg'
-{%-endif%}
 
-{%-if salt['grains.get']('os') in ['CentOS', 'RedHat']%}
-
+{%-elif salt['grains.get']('os') in ['CentOS', 'RedHat']%}
 
 {%-endif%}
 
@@ -51,11 +49,5 @@ services_running:
     - reload: True
 {%-endif%}
     - enable: True
-
-#      - '/sbin/call_home':
-#        - contents: 'salt-call --state_output=mixed state.apply'
-#        - mode: 755
-
-
 
 # End of configuration file.
