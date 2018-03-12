@@ -1,0 +1,41 @@
+{% set network = salt['grains.filter_by']({
+    'Debian': {
+        'service': 'networking',
+        'path': '/etc/network/interfaces',
+        'mod_path': '/etc/modules',
+        'manager': 'NetworkManager',
+    },
+
+    'RedHat': {
+        'service': 'network',
+        'manager': 'NetworkManager',
+        'path': '/etc/sysconfig/network-scripts/ifcfg-',
+        'mod_path': '/etc/modprobe.d/bonding.conf',
+    },
+
+    'OpenBSD': {
+        'service': 'networking',
+        'path': '/etc/network/',
+        'mod_path': '/etc/modules',
+        'manager': 'NetworkManager',
+    },
+
+    'CentOS': {
+        'service': 'network',
+        'manager': 'NetworkManager',
+        'path': '/etc/sysconfig/network-scripts/ifcfg-',
+        'mod_path': '/etc/modprobe.d/bonding.conf',
+    },
+
+    'Ubuntu': {
+        'service': 'networking',
+        'path': '/etc/network/interfaces',
+        'mod_path': '/etc/modules',
+        'manager': 'NetworkManager',
+    },
+}, merge=salt['grains.filter_by']({
+    '*': {
+        'search': salt['pillar.get']('software:dns:search'),
+        'nameservers': salt['pillar.get']('software:dns:servers'),
+    },
+}, merge=salt['pillar.get']('network:lookup')))%}

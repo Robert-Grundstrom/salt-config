@@ -1,4 +1,4 @@
-{% from slspath + '/map.jinja' import osystem with context %}
+{%- from slspath + '/map.jinja' import network with context %}
 # This is the common configuration file.
 # It handels network settings and general packet installation.
 ---
@@ -6,33 +6,30 @@
 disabled_services:
   service.dead:
     - names:
-        - '{{osystem.network_manager}}'
+        - '{{ network.manager }}'
     - enable: False
-
-# Installs packets that is defined in pillar.
-{%-for packet in salt['pillar.get']('software:default_pkgs',)%}
-{{packet}}:
-  pkg.latest
-{%- endfor %}
 
 # Apply configuration files. This will configure network interfaces according
 # to the pillar files. /etc/resolv.conf will also be set accoring to pillars.
 # /sbin/call_home will be created as a shortcut to
 # "salt-call --state_output=mixed state.apply"
-apply_configuration:
+network_conf:
   file.managed:
     - names:
-      - '{{osystem.network_path}}':
+
+{%- if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
+      - '{{ network.path }}':
         - source: 'salt://{{slspath}}/files/network.cfg'
+{%-endif%}
+
+{%-if salt['grains.get']('os') in ['CentOS', 'RedHat']%}
+
+
+{%-endif%}
 
       - '/etc/resolv.conf':
         - source: 'salt://{{slspath}}/files/resolv.conf'
-        - search: {{ salt['pillar.get']('software:dns:set_search') }}
-        - nameservers: {{salt['pillar.get']('software:dns:set_server')}}
-
-      - '/sbin/call_home':
-        - contents: 'salt-call --state_output=mixed state.apply'
-        - mode: 755
+        - slspath: '{{ slspath }}'
 
     - mode: 644
     - template: jinja
@@ -47,9 +44,18 @@ services_running:
   service.running:
     - names:
       - 'salt-minion'
-      - '{{osystem.network}}':
+      - '{{network.service}}':
         - watch:
-          - file: 'apply_configuration'
+          - file: 'network_conf'
+{%-if salt['grains.get']('os') in ['Ubuntu', 'Debian']%}
+    - reload: True
+{%-endif%}
     - enable: True
+
+#      - '/sbin/call_home':
+#        - contents: 'salt-call --state_output=mixed state.apply'
+#        - mode: 755
+
+
 
 # End of configuration file.

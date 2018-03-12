@@ -4,11 +4,9 @@ base:
     - configuration.old-common
     - software.firewall-base
     - roles.groups.administrator
-    - software.ntp
+    - software
     - software.firewall-base
     - software.snmp
-    - software.sshd
-    - software.sudo
     - configuration.salt-repository
 
 # General for OpenBSD.

@@ -10,8 +10,8 @@ software:
 
 # DNS search and servers:
   dns:
-    set_search: blacknet.lan
-    set_server:
+    search: blacknet.lan
+    servers:
       - 172.18.0.254
 
 # NTP servers:
