@@ -27,7 +27,7 @@ software:
 
 # Firewall settings:
   firewall:
-    - enable: False
+    - enable: True
 #    - rules:
 #      - 'TCP,4505,172.18.0.0/24'
 #      - 'TCP,4506,172.18.0.0/24'
