@@ -1,0 +1,22 @@
+{% set firewall = salt['grains.filter_by']({
+    'Debian': {
+        'pkg': 'iptables',
+    },
+    'RedHat': {
+        'pkg': 'iptables-services',
+    },
+    'OpenBSD': {
+        'pkg': 'snmpd',
+    },
+    'CentOS': {
+        'pkg': 'iptables-services',
+    },
+    'Ubuntu': {
+        'pkg': 'iptables',
+    },
+}, merge=salt['grains.filter_by']({
+    '*': {
+        'enable': salt['pillar.get']('software:firewall:enable', False),
+        'pillar': salt['pillar.get']('software:firewall:rules'),
+    },
+}, merge=salt['pillar.get']('firewall:lookup')))%}

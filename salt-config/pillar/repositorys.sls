@@ -7,3 +7,8 @@ configuration:
     salt:
       url: 'http://storage.blacknet.lan/salt'
       key: 'http://storage.blacknet.lan/salt/key/SALTSTACK-GPG-KEY.pub'
+
+#   apt:
+#
+#   yum:
+#  

@@ -1,12 +1,13 @@
 base:
 # For all servers but OpenBSD.
   '* not G@os:OpenBSD':
+    
     - configuration.salt-repository
     - configuration.network
+    - configuration.users.administrator
+    - configuration.call_home
     - software.firewall-base
     - software.common_pkgs
-    - software.firewall-base
-    - roles.groups.administrator
 
 # General for OpenBSD.
   'G@os:OpenBSD':

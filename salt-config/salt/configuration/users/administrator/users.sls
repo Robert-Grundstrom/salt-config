@@ -15,16 +15,9 @@
     - enforce_password: True
     - groups:
       - {{user}}
-{%-if salt['grains.get']('os') in ['OpenBSD']%}
+    {%-if salt['grains.get']('os') in ['OpenBSD']%}
       - wheel
-{%-endif%}
-
-#  ssh_auth.present:
-#    - comment: 'Adding keys'
-#    - user: {{user}}
-#    - source: 'salt://.ssh-keys/{{user}}.auth'
-#    - config: '%h/.ssh/authorized_keys'
-
+    {%-endif%}
   {% endif %}
 {% endfor %}
 

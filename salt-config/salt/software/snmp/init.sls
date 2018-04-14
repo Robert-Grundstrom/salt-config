@@ -40,11 +40,9 @@ set_SNMP_fwrule_{{snmp.monitor_ip}}:
   iptables.append:
   - dport: '161'
   - proto: 'udp'
-  - d: {{snmp.bind}}/32
-  {%for monitor in snmp.monitor_ip%}
-  - source: {{monitor}}/32
-  {%endfor%}
-  - chain: 'SOFTWARE'
+  - chain: 'SERVICES'
+  - jump: 'ACCEPT'
+  - connstate: 'NEW'
   - save: True
 
 # Make sure SNMP service are running.

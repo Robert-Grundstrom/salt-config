@@ -1,3 +1,4 @@
+{%- from slspath + '/map.jinja' import sshd with context %}
 # SSHD configuration.
 
 # Intalling and keeping service up to date.
@@ -18,7 +19,7 @@ set_sshd_fwchains:
 set_sshd_chainrule:
   iptables.append:
   - name: 'SSH Connections'
-  - chain: 'INPUT'
+  - chain: 'SERVICES'
   - jump: 'SSHSCAN'
   - i: '!lo'
   - dport: '22'
@@ -43,7 +44,7 @@ set_sshd_fwrules:
       - log-prefix: '[SSH Brute-Force attempt:] '
       - log-level: '7'
       - seconds: '120'
-      - hitcount: '10'
+      - hitcount: '5'
 
     - 'SSHD Drop':
       - position: '3'
@@ -51,12 +52,12 @@ set_sshd_fwrules:
       - match: 'recent --update --name SSH --rsource'
       - connstate: 'NEW'
       - seconds: '120'
-      - hitcount: '10'
+      - hitcount: '5'
 
     - 'SSHD Accept':
       - position: '4'
       - jump: 'ACCEPT'
-      - source: {{salt['pillar.get']('software:ssh:source')}}
+      - source: {{salt['pillar.get']('software:ssh:source', '0.0.0.0/0')}}
  
   - chain: 'SSHSCAN'
   - proto: 'tcp'
@@ -75,8 +76,8 @@ apply_sshd_config:
       - '/var/log/iptables.log':
         - create: True
         - mode: 640
-        - user: syslog
-        - group: adm
+        - user: {{sshd.rsyslog_usr}}
+        - group: {{sshd.rsyslog_grp}}
         - replace: False
     - mode: 644
     - user: root
@@ -88,7 +89,6 @@ sshd_services_running:
   service.running:
     - names: 
       - 'sshd'
-      - 'rsyslog'
     - enable: True
     - watch:
       - file: apply_sshd_config

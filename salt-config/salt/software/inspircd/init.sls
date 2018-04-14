@@ -16,7 +16,7 @@ inspircd_fwrules:
     - 'inspircd':
       - dport: '{{ inspircd.port }}'
       - comment: 'inspircd'
-  - chain: 'SOFTWARE'
+  - chain: 'SERVICES'
   - proto: 'tcp'
   - table: filter
   - save: True

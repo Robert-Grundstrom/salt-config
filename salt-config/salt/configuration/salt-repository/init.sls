@@ -13,13 +13,13 @@ repos_ubuntu:
     - key_url: '{{saltrepo.key}}'
 {%endif%}
 
-{%-if salt['grains.get']('os') in ['CentOS', 'RedHat']%}
-repos_ubuntu:
-  pkgrepo.managed:
-    - humanname: 'Saltstack repository.'
-    - name: 'deb http://storage.blacknet.lan/salt xenial main'
-    - dist: 'xenial'
-    - file: '/etc/apt/sources.list.d/saltstack.list'
-    - key_url: 'http://storage.blacknet.lan/salt/key/SALTSTACK-GPG-KEY.pub'
+# {%-if salt['grains.get']('os') in ['CentOS', 'RedHat']%}
+# repos_ubuntu:
+#  pkgrepo.managed:
+#    - humanname: 'Saltstack repository.'
+#    - name: 'deb http://storage.blacknet.lan/salt xenial main'
+#    - dist: 'xenial'
+#    - file: '/etc/apt/sources.list.d/saltstack.list'
+#    - key_url: 'http://storage.blacknet.lan/salt/key/SALTSTACK-GPG-KEY.pub'
 {%endif%}
 

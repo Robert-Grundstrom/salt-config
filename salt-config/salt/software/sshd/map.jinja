@@ -1,0 +1,32 @@
+{% set sshd = salt['grains.filter_by']({
+    'Debian': {
+        'pkg': 'iptables',
+        'rsyslog_usr': 'syslog',
+        'rsyslog_grp': 'adm'
+    },
+    'RedHat': {
+        'pkg': 'iptables-services',
+        'rsyslog_usr': 'root',
+        'rsyslog_grp': 'root'
+    },
+    'OpenBSD': {
+        'pkg': 'snmpd',
+        'rsyslog_usr': 'syslog',
+        'rsyslog_grp': 'adm'
+    },
+    'CentOS': {
+        'pkg': 'iptables-services',
+        'rsyslog_usr': 'root',
+        'rsyslog_grp': 'root'
+    },
+    'Ubuntu': {
+        'pkg': 'iptables',
+        'rsyslog_usr': 'syslog',
+        'rsyslog_grp': 'adm'
+    },
+}, merge=salt['grains.filter_by']({
+    '*': {
+        'enable': salt['pillar.get']('software:firewall:enable', False),
+        'pillar': salt['pillar.get']('software:firewall:rules'),
+    },
+}, merge=salt['pillar.get']('sshd:lookup')))%}
