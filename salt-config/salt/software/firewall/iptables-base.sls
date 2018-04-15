@@ -103,7 +103,9 @@ iptables-drop:
     - save: True
 {%-endif%}
 
+{%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
 iptables-service:
   service.running:
     - name: 'iptables'
     - enable: 'true'
+{%-endif%}
