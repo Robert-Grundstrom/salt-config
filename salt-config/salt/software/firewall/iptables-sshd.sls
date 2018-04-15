@@ -1,44 +1,40 @@
-{%- from slspath + '/map.jinja' import sshd with context %}
+{%- from slspath + '/map.jinja' import iptables with context %}
 # SSHD configuration.
 
 # Intalling and keeping service up to date.
-install_sshd_pkgs:
+sshd-pkgs:
   pkg.latest:
     - pkgs:
       - openssh-server
       - rsyslog
 
 # Set up a iptables chain for the service.
-set_sshd_fwchains:
+sshd-chain:
   iptables.chain_present:
   - names:
     - 'SSHSCAN'
   - family: 'ipv4'
 
 # Set up the iptable rules.
-set_sshd_chainrule:
-  iptables.append:
-  - name: 'SSH Connections'
-  - chain: 'SERVICES'
-  - jump: 'SSHSCAN'
-  - i: '!lo'
-  - dport: '22'
-  - connstate: 'NEW'
-  - match: 'state'
-  - proto: 'tcp'
-  - table: filter
-  - save: True
+flush-sshscan:
+  iptables.flush:
+    - chain: 'SSHSCAN'
 
-set_sshd_fwrules:
-  iptables.insert:
+sshd-rules:
+  iptables.append:
   - names:
+    - 'SSH Connections':
+      - chain: 'SERVICES'
+      - jump: 'SSHSCAN'
+      - i: '!lo'
+      - dport: '22'
+      - connstate: 'NEW'
+
     - 'SSHD Set':
-      - position: '1'
       - match: 'recent --set --name SSH --rsource'
       - connstate: 'NEW'
 
     - 'SSHD Log':
-      - position: '2'
       - match: 'recent --update --name SSH --rsource'
       - jump: 'LOG'
       - log-prefix: '[SSH Brute-Force attempt:] '
@@ -47,15 +43,13 @@ set_sshd_fwrules:
       - hitcount: '20'
 
     - 'SSHD Drop':
-      - position: '3'
-      - jump: 'REJECT'
+      - jump: 'DROP'
       - match: 'recent --update --name SSH --rsource'
       - connstate: 'NEW'
       - seconds: '120'
       - hitcount: '20'
 
     - 'SSHD Accept':
-      - position: '4'
       - jump: 'ACCEPT'
       - source: {{salt['pillar.get']('software:ssh:source', '0.0.0.0/0')}}
  
@@ -64,7 +58,7 @@ set_sshd_fwrules:
   - table: filter
   - save: True
 
-apply_sshd_config:
+sshd-config:
   file.managed:
     - names:
       - '/etc/ssh/sshd_config':
@@ -76,8 +70,8 @@ apply_sshd_config:
       - '/var/log/iptables.log':
         - create: True
         - mode: 640
-        - user: {{sshd.rsyslog_usr}}
-        - group: {{sshd.rsyslog_grp}}
+        - user: {{iptables.rsyslog_usr}}
+        - group: {{iptables.rsyslog_grp}}
         - replace: False
     - mode: 644
     - user: root
@@ -85,11 +79,11 @@ apply_sshd_config:
     - template: jinja
 
 # Make sure services are running.
-sshd_services_running:
+sshd-services:
   service.running:
     - names: 
       - 'sshd'
     - enable: True
     - watch:
-      - file: apply_sshd_config
-      - pkg: install_sshd_pkgs
+      - file: sshd-config
+      - pkg: sshd-pkgs

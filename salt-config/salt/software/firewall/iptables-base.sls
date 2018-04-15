@@ -1,29 +1,32 @@
-{% from slspath + '/map.jinja' import firewall with context %}
-# iptables is used as a firewall for clients.
-# This is for ipv4 only!
-# 
-# Install of the dependencys needed for iptables to work.
-fwpkg_dep:
+{%- from slspath + '/map.jinja' import iptables with context %}
+# Install packets:
+iptables-pkg:
   pkg.latest:
   - pkgs:
-    - {{firewall.pkg}}
+    - {{iptables.pkg}}
 {%-if not salt['grains.get']('os') in ['CentOS', 'Redhat']%}
     - iptables-persistent
 {%-endif%}
 
+firewalld-dead:
+  service.dead:
+    - name: 'firewalld'
+    - enable: False
+
 # Setting up the chains we will be using.
 # Custom is used for the rules that are set in the pillar files.
-set_fwchains:
+iptables-chains:
   iptables.chain_present:
   - names:
     - 'SERVICES'
+    - 'PILLAR'
   - family: 'ipv4'
 
 # The basic settings for iptables is set here.
 # More advanced rules are set in the states
 # for each service.
 
-set_fwrules:
+iptables-rules:
   iptables.append:
   - names:
   # Related, Established connections are able to keep
@@ -40,28 +43,23 @@ set_fwrules:
     - 'Services Accept':
       - jump: 'SERVICES'
       - comment: 'Jump to SERVICES rules.'
+      - connstate: 'NEW'
+
+    - 'Pillar Accept':
+      - jump: 'PILLAR'
+      - comment: 'Jump to SERVICES rules.'
+      - connstate: 'NEW'
 
   # Common for all rules.
   - table: 'filter'
   - chain: 'INPUT'
   - jump: 'ACCEPT'
+  - family: 'ipv4'
   - save: True
 
 # Setting the custom rules of the server defined by pillar.
-{%- if salt.pillar.get('firewall:rules', None) is defined %}
-set_pillar_chain:
-  iptables.chain_present:
-  - name: 'PILLAR'
-  - family: 'ipv4'
-
-set_pillar_rules:
-  iptables.append:
-  - name: 'Pillar Accept'
-  - jump: 'PILLAR'
-  - comment: 'Jump to PILLAR rules.'
-  - chain: 'INPUT'
-
-  {%-for fw_value in firewall.pillar%}
+{%- if ['iptables.pillar', None] is defined %}
+  {%-for fw_value in iptables.pillar%}
     {%-set proto, dport, source = fw_value.split(',')%}
 
 {{proto+'/'+dport+'/src:'+source}}:
@@ -78,28 +76,34 @@ set_pillar_rules:
 # Here we have fw_enable pillar setting regarding if the DROP policy to
 # the INPUT chain. (Default False) This is used to avoid accidental lockout.
 # check your rules before setting fw_enable = True
-{%-if firewall.enable == True%}
-set_fwpolicys:
+iptable-policy:
   iptables.set_policy:
     - chain: 'INPUT'
     - table: filter
     - family: ipv4
     - save: True
-    - policy: DROP
+    - policy: ACCEPT 
 
-add_drop:
+{%-if iptables.enable == True%}
+iptables-drop:
   iptables.append:
     - chain: 'INPUT'
     - jump: 'DROP'
-
+    - table: 'filter'
+    - family: 'ipv4'
+    - save: True
 {%-else%}
 
-set_fwpolicys:
-  iptables.set_policy:
+iptables-drop:
+  iptables.delete:
     - chain: 'INPUT'
-    - table: filter
-    - family: ipv4
+    - jump: 'DROP'
+    - table: 'filter'
+    - family: 'ipv4'
     - save: True
-    - policy: ACCEPT
-
 {%-endif%}
+
+iptables-service:
+  service.running:
+    - name: 'iptables'
+    - enable: 'true'

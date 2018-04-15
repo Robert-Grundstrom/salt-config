@@ -6,7 +6,7 @@ base:
     - configuration.network
     - configuration.users.administrator
     - configuration.call_home
-    - software.firewall-base
+    - software.firewall
     - software.common_pkgs
 
 # General for OpenBSD.

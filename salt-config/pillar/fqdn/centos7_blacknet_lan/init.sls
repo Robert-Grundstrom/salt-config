@@ -22,7 +22,7 @@ software:
 
 # SSHD Options:
   ssh:
-    - source: '172.18.0.0/24'
+#    - source: '172.18.0.0/24'
     - interface: 'ens192'
 
 # Firewall settings:

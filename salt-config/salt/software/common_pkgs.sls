@@ -1,6 +1,6 @@
 include:
   - {{ slspath }}.vim
   - {{ slspath }}.ntp
-  - {{ slspath }}.sshd
   - {{ slspath }}.sudo
   - {{ slspath }}.snmp
+  - {{ slspath }}.firewall
