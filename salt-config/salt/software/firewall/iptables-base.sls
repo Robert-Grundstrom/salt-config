@@ -8,13 +8,14 @@ iptables-pkg:
     - iptables-persistent
 {%-endif%}
 
+# Later distros of Ubuntu and CentOS is using firewalld
+# so we want to disable that one.
 firewalld-dead:
   service.dead:
     - name: 'firewalld'
     - enable: False
 
 # Setting up the chains we will be using.
-# Custom is used for the rules that are set in the pillar files.
 iptables-chains:
   iptables.chain_present:
   - names:
@@ -29,17 +30,17 @@ iptables-chains:
 iptables-rules:
   iptables.append:
   - names:
-  # Related, Established connections are able to keep
-  # thair connectios alive.
+    # Related, Established connections are able to keep thair connectios alive.
     - 'related-established':
       - connstate: 'ESTABLISHED,RELATED'
 
-  # We will enable the use of the loopback interface.
+    # We will enable the use of the loopback interface.
     - 'loopback':
       - i: lo
       - jump: 'ACCEPT'
       - comment: "Accept lo traffic"
 
+    # The jumps to our chains.
     - 'Services Accept':
       - jump: 'SERVICES'
       - comment: 'Jump to SERVICES chain.'
@@ -57,7 +58,17 @@ iptables-rules:
   - family: 'ipv4'
   - save: True
 
-# Setting the custom rules of the server defined by pillar.
+# Setting the pillar rules.
+# Full pillar path: "software:firewall:rules"
+# Pillar example:
+# -------------------------------------------
+# software:
+#   firewall:
+#    - enable: True
+#    - rules:
+#      - 'TCP,80,172.18.0.0/24'
+#      - 'TCP,443,172.18.0.0/24'
+# -------------------------------------------
 {%- if ['iptables.pillar', None] is defined %}
   {%-for fw_value in iptables.pillar%}
     {%-set proto, dport, source = fw_value.split(',')%}
@@ -73,9 +84,9 @@ iptables-rules:
   {%-endfor%}
 {%-endif%}
 
-# Here we have fw_enable pillar setting regarding if the DROP policy to
-# the INPUT chain. (Default False) This is used to avoid accidental lockout.
-# check your rules before setting fw_enable = True
+# Setting the INPUT policy to ACCEPT. Since we are using a DROP
+# rule instead of the policy. This makes it possible to
+# flush iptables witout risking to lock yourself out.
 iptable-policy:
   iptables.set_policy:
     - chain: 'INPUT'
@@ -84,6 +95,9 @@ iptable-policy:
     - save: True
     - policy: ACCEPT 
 
+# Here we have enable/disable setting regarding if the DROP rule for
+# the INPUT chain. (Default False) Full pillar path: "software:firewall:enable"
+# This is used to enable or disable the firewall.
 {%-if iptables.enable == True%}
 iptables-drop:
   iptables.append:
@@ -103,6 +117,7 @@ iptables-drop:
     - save: True
 {%-endif%}
 
+# In CentOS and Redhat iptables is a service and needs to be runnung.
 {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
 iptables-service:
   service.running:
