@@ -42,12 +42,12 @@ iptables-rules:
 
     - 'Services Accept':
       - jump: 'SERVICES'
-      - comment: 'Jump to SERVICES rules.'
+      - comment: 'Jump to SERVICES chain.'
       - connstate: 'NEW'
 
     - 'Pillar Accept':
       - jump: 'PILLAR'
-      - comment: 'Jump to SERVICES rules.'
+      - comment: 'Jump to PILLAR chain.'
       - connstate: 'NEW'
 
   # Common for all rules.
