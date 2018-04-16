@@ -1,4 +1,17 @@
 {%- from slspath + '/map.jinja' import iptables with context %}
+
+# Pillar example:
+# -------------------------------------------
+# software:
+#   firewall:
+#    - enable: True
+#    - rules:
+#      - 'TCP,80,172.18.0.0/24'
+#      - 'TCP,443,172.18.0.0/24'
+#
+# Rules syntax: protocol,port,source/prefix
+# -------------------------------------------
+
 # Install packets:
 iptables-pkg:
   pkg.latest:
@@ -24,9 +37,6 @@ iptables-chains:
   - family: 'ipv4'
 
 # The basic settings for iptables is set here.
-# More advanced rules are set in the states
-# for each service.
-
 iptables-rules:
   iptables.append:
   - names:
@@ -59,16 +69,6 @@ iptables-rules:
   - save: True
 
 # Setting the pillar rules.
-# Full pillar path: "software:firewall:rules"
-# Pillar example:
-# -------------------------------------------
-# software:
-#   firewall:
-#    - enable: True
-#    - rules:
-#      - 'TCP,80,172.18.0.0/24'
-#      - 'TCP,443,172.18.0.0/24'
-# -------------------------------------------
 {%- if ['iptables.pillar', None] is defined %}
   {%-for fw_value in iptables.pillar%}
     {%-set proto, dport, source = fw_value.split(',')%}
