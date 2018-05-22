@@ -10,9 +10,9 @@ software:
 
 # DNS search and servers:
   dns:
-    search: blacknet.lan
+    search: 'blacknet.lan'
     servers:
-      - 172.18.0.254
+      - '172.18.0.254'
 
 # NTP servers:
   ntp:

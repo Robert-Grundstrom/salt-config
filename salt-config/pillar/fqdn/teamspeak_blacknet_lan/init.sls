@@ -10,23 +10,28 @@ software:
 
 # DNS search and servers:
   dns:
-    set_search: blacknet.lan
-    set_server:
-      - 172.18.0.254
+    search: 'blacknet.lan'
+    servers:
+      - '172.18.0.254'
 
 # NTP servers:
   ntp:
-    - ntp1.sth.netnod.se
-    - ntp2.sth.netnod.se
+    servers:
+      - 'ntp1.sth.netnod.se'
+      - 'ntp2.sth.netnod.se'
 
 # SSHD Options:
-  ssh_config:
+  ssh:
     - source: '172.18.0.0/24'
     - interface: 'ens160'
 
 # Firewall settings:
   firewall:
-    - enable: False
+    - enable: True
+    - rules:
+      - 'TCP,10011,0.0.0.0/0'
+      - 'TCP,30033,0.0.0.0/0'
+      - 'UDP,9987,0.0.0.0/0'
 
 # SNMP settings:
   snmp:

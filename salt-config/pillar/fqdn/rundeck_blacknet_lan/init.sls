@@ -10,14 +10,15 @@ software:
 
 # DNS search and servers:
   dns:
-    set_search: blacknet.lan
-    set_server:
+    search: blacknet.lan
+    servers:
       - 172.18.0.254
 
 # NTP servers:
   ntp:
-    - ntp1.sth.netnod.se
-    - ntp2.sth.netnod.se
+    servers:
+      - ntp1.sth.netnod.se
+      - ntp2.sth.netnod.se
 
 # SSHD Options:
   ssh:

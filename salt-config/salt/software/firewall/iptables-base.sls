@@ -106,6 +106,7 @@ iptables-drop:
     - table: 'filter'
     - family: 'ipv4'
     - save: True
+
 {%-else%}
 
 iptables-drop:
