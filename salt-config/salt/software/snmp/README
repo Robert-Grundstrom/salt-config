@@ -1,0 +1,38 @@
+This state will install the snmp deamon and configure a
+read only user using snmpv3. This is a secure and encrypted
+version of snmp.
+
+Usage for this is to setup a way to monitor your system
+most monitor software supports snmpv3
+(Examples are Zabbix or OP5.)
+
+# Pillar example/defaults.
+# Default setting if pillar is not defined.
+# -----------------------------------------
+software:
+  snmp:
+    user: rouser
+    sha: monkeylikebanana
+    aes: monkeyhasbanana
+    bind: 0.0.0.0
+# -----------------------------------------
+
+
+# NOTE:
+# The user and passwords will only get pushed to the system
+# if there is a change in the packet.
+#
+# i.e a packet update/fresh install.
+#
+# Reason for this is that salt pushes this information
+# in clear text. If you need to update the user and passwords
+# the easiest way is to remove the snmp packet.
+#
+# For CentOS/Redhat:
+#    yum -y remove net-snmp
+#
+# For Ubuntu/Debian:
+#    apt -y remove snmpd
+#
+# And then run the snmp salt state.
+#    salt-call state.sls software.snmp

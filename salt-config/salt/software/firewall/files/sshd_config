@@ -65,7 +65,7 @@ X11UseLocalhost         yes
 # PermitTTY               yes
 PrintLastLog            yes
 TCPKeepAlive            yes
-UseDNS                  yes
+UseDNS                  no
 
 GatewayPorts		no
 X11Forwarding		no

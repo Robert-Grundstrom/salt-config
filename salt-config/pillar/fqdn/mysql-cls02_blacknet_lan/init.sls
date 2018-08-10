@@ -2,17 +2,17 @@ software:
 
 # Network configuration:
   network:
-    ens160:
+    ens192:
       set_type: 'single'
-      set_ipaddr: '172.18.0.55'
+      set_ipaddr: '172.18.0.21'
       set_netmask: '255.255.255.0'
       set_gateway: '172.18.0.254'
 
 # DNS search and servers:
   dns:
-    - search: blacknet.lan
-    - servers:
-      - 172.18.0.254
+    search: 'blacknet.lan'
+    servers:
+      - '172.18.0.254'
 
 # NTP servers:
   ntp:
@@ -23,23 +23,27 @@ software:
 # SSHD Options:
   ssh:
     - source: '172.18.0.0/24'
+    - interface: 'ens192'
 
 # Firewall settings:
   firewall:
-    - enable: False
+    - enable: True
+    - rules:
+      - 'TCP,3306,172.18.0.101/32'
+      - 'TCP,3306,172.18.0.241/32'
 
 # SNMP settings:
   snmp:
-    user: rouser
-    sha: monkeylikebanana
-    aes: monkeyhasbanana
-    bind: '172.18.0.55'
+    user: 'rouser'
+    sha: 'monkeylikebanana'
+    aes: 'monkeyhasbanana'
+    bind: '172.18.0.21'
 
 # The default packets to be installed.
 # Salt will keep them at latest version.
-  default_pkgs:
-    - vim
-    - sudo
+#  default_pkgs:
+#    - vim
+#    - sudo
 
 # OP5, Zabbix servers:
   monitor:

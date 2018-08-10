@@ -1,0 +1,25 @@
+[local_base]
+name=CentOS-$releasever - Local Base
+baseurl=http://storage.blacknet.lan/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#released updates
+[local_updates]
+name=CentOS-$releasever - Local Updates
+baseurl=http://storage.blacknet.lan/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that may be useful
+[local_extras]
+name=CentOS-$releasever - Local Extras
+baseurl=http://storage.blacknet.lan/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+[local_salt]
+name=CentOS-$releasever - Local Salt
+baseurl=http://storage.blacknet.lan/centos/$releasever/salt/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/saltstack-signing-key

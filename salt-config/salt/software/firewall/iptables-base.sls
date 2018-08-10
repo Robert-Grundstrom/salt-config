@@ -1,18 +1,6 @@
 {%- from slspath + '/map.jinja' import iptables with context %}
 
-# Pillar example:
-# -------------------------------------------
-# software:
-#   firewall:
-#    - enable: True
-#    - rules:
-#      - 'TCP,80,172.18.0.0/24'
-#      - 'TCP,443,172.18.0.0/24'
-#
-# Rules syntax: protocol,port,source/prefix
-# -------------------------------------------
-
-# Install packets:
+# Install requered packets:
 iptables-pkg:
   pkg.latest:
   - pkgs:
@@ -40,7 +28,7 @@ iptables-chains:
 iptables-rules:
   iptables.append:
   - names:
-    # Related, Established connections are able to keep thair connectios alive.
+    # Related, Established connections are able to keep the connections alive.
     - 'related-established':
       - connstate: 'ESTABLISHED,RELATED'
 
@@ -118,7 +106,7 @@ iptables-drop:
     - save: True
 {%-endif%}
 
-# In CentOS and Redhat iptables is a service and needs to be runnung.
+# In CentOS and Redhat iptables is a service and needs to be running.
 {%-if salt['grains.get']('os') in ['CentOS', 'Redhat']%}
 iptables-service:
   service.running:

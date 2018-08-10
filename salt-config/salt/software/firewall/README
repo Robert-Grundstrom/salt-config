@@ -1,0 +1,11 @@
+# Pillar example:
+# -------------------------------------------
+software:
+  firewall:
+    - enable: True
+    - rules:
+      - 'TCP,80,172.18.0.0/24'
+      - 'TCP,443,172.18.0.0/24'
+
+Rules syntax: protocol,port,source/prefix
+# -------------------------------------------

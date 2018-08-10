@@ -15,6 +15,9 @@ base:
     - software.ntp
     - roles.groups.administrator
 
+  'G@os:CentOS':
+    - configuration.centos-repo
+
 # Individual servers.
   'storage.blacknet.lan':
     - software.nfs-server

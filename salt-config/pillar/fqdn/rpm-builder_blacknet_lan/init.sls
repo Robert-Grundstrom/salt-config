@@ -2,9 +2,9 @@ software:
 
 # Network configuration:
   network:
-    enp0s31f6:
+    ens192:
       set_type: 'single'
-      set_ipaddr: '172.18.0.10'
+      set_ipaddr: '172.18.0.63'
       set_netmask: '255.255.255.0'
       set_gateway: '172.18.0.254'
 
@@ -23,7 +23,7 @@ software:
 # SSHD Options:
   ssh:
     - source: '172.18.0.0/24'
-    - interface: 'enp0s31f6'
+    - interface: 'ens192'
 
 # Firewall settings:
   firewall:
@@ -35,17 +35,17 @@ software:
 # SNMP settings:
   snmp:
     user: rouser
-    sha: monkeylikebanana
-    aes: monkeyhasbanana
-    bind: 172.18.0.10
+    sha: 'monkeylikebanana'
+    aes: 'monkeyhasbanana'
+    bind: '172.18.0.63'
 
 # The default packets to be installed.
 # Salt will keep them at latest version.
   default_pkgs:
-    - vim
+    - vim-enahnced
     - sudo
 
 # OP5, Zabbix servers:
   monitor:
     servers:
-      - '172.18.0.10'
+      - '172.18.0.63'

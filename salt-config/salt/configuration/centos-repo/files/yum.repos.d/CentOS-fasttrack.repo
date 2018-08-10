@@ -1,0 +1,13 @@
+###########################################################################
+# This file is managed by Salt any changes made here will be overwritten. #
+#                                                                         #
+# If changes here are needed then please contact system administrator.    #
+###########################################################################
+
+[fasttrack]
+name=CentOS-7 - fasttrack
+mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=fasttrack&infra=$infra
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
