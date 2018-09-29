@@ -4,7 +4,7 @@ software:
   network:
     ens192:
       set_type: 'single'
-      set_ipaddr: '172.18.0.253'
+      set_ipaddr: '172.18.0.252'
       set_netmask: '255.255.255.0'
       set_gateway: '172.18.0.254'
 
@@ -24,19 +24,19 @@ software:
         # SSHD Options:
   ssh:
     source: '172.18.0.0/24'
-    bind: '172.18.0.253'
+    bind: '172.18.0.252'
 
   # Firewall settings:
   firewall:
     enable: True
-    rules:
-      - 'TCP,8080,172.18.0.0/24'
+#    rules:
+#      - 'TCP,8080,172.18.0.0/24'
   # SNMP settings:
   snmp:
     user: rouser
     sha: monkeylikebanana
     aes: monkeyhasbanana
-    bind: 172.18.0.253
+    bind: 172.18.0.252
 
   # The default packets to be installed.
   # Salt will keep them at latest version.
@@ -48,3 +48,6 @@ software:
   monitor:
     servers:
       - '172.18.0.60'
+
+include:
+  - {{slspath}}.squid

@@ -3,6 +3,6 @@ base:
     - users
     - repositorys 
 
-  'fqdn:{{salt['grains.get']('fqdn')}}':
+  'id:{{salt['grains.get']('id')}}':
     - match: grain
-    - fqdn.{{salt['grains.get']('fqdn').split('.')|join('_')}}
+    - servers.{{salt['grains.get']('id')}}

@@ -11,6 +11,7 @@ Defaults secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/b
 
 # User for apt-dater
 Defaults env_reset,env_keep=MAINTAINER
+rundeck ALL=(ALL) NOPASSWD:ALL
 
 # User privilege specification
 {%- for sudo_user in salt['pillar.get']('server:set_users') %}

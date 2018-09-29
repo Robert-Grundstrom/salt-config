@@ -22,3 +22,6 @@ base:
   'storage.blacknet.lan':
     - software.nfs-server
     - software.pxeboot
+
+  'bible-black':
+    - software.squid
